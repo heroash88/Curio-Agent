@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1015" height="823" viewBox="0 0 1015 823" role="img" aria-labelledby="title desc">
+  <title id="title">Curio dashboard overview</title>
+  <desc id="desc">A sanitized Curio dashboard preview with sample widgets and no live personal data.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#171712"/>
+      <stop offset="0.48" stop-color="#15372f"/>
+      <stop offset="1" stop-color="#1b2c54"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#24231e"/>
+      <stop offset="1" stop-color="#181815"/>
+    </linearGradient>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="18" stdDeviation="24" flood-color="#000000" flood-opacity="0.24"/>
+    </filter>
+  </defs>
+  <rect width="1015" height="823" fill="url(#bg)"/>
+  <rect width="1015" height="74" fill="#191916" opacity="0.92"/>
+  <circle cx="51" cy="37" r="24" fill="#23221d" stroke="#4a463c"/>
+  <text x="84" y="29" fill="#b9b0a4" font-family="Arial, sans-serif" font-size="10" font-weight="700" letter-spacing="6">GOOD EVENING</text>
+  <text x="84" y="53" fill="#f6efe3" font-family="Arial, sans-serif" font-size="20" font-weight="700">Demo Dashboard</text>
+  <rect x="488" y="16" width="116" height="44" rx="22" fill="#322f27" stroke="#5c5649"/>
+  <text x="546" y="43" text-anchor="middle" fill="#f8efe1" font-family="Arial, sans-serif" font-size="14" font-weight="700">Connect</text>
+  <g fill="#2d2a24" stroke="#575044">
+    <circle cx="631" cy="38" r="20"/>
+    <circle cx="678" cy="38" r="20"/>
+    <circle cx="725" cy="38" r="20"/>
+    <circle cx="772" cy="38" r="20"/>
+    <circle cx="819" cy="38" r="20"/>
+    <circle cx="866" cy="38" r="20"/>
+    <circle cx="913" cy="38" r="20"/>
+    <circle cx="960" cy="38" r="20"/>
+  </g>
+  <g filter="url(#softShadow)">
+    <rect x="56" y="92" width="209" height="200" rx="31" fill="url(#panel)"/>
+    <rect x="285" y="92" width="436" height="200" rx="31" fill="url(#panel)"/>
+    <rect x="741" y="92" width="209" height="200" rx="31" fill="url(#panel)"/>
+    <rect x="56" y="312" width="209" height="420" rx="31" fill="url(#panel)"/>
+    <rect x="285" y="312" width="209" height="420" rx="31" fill="url(#panel)"/>
+    <rect x="513" y="312" width="436" height="420" rx="31" fill="url(#panel)"/>
+    <rect x="56" y="753" width="322" height="116" rx="31" fill="url(#panel)"/>
+    <rect x="398" y="753" width="322" height="116" rx="31" fill="url(#panel)"/>
+    <rect x="741" y="753" width="209" height="116" rx="31" fill="url(#panel)"/>
+  </g>
+  <text x="305" y="142" fill="#f8efe1" font-family="Georgia, serif" font-size="28">Good evening.</text>
+  <text x="305" y="167" fill="#b9b0a4" font-family="Arial, sans-serif" font-size="14">Friday, April 24</text>
+  <rect x="503" y="113" width="151" height="32" rx="16" fill="#312f28" stroke="#4d473d"/>
+  <rect x="508" y="117" width="62" height="24" rx="12" fill="#f7c894"/>
+  <text x="539" y="133" text-anchor="middle" fill="#1d1a16" font-family="Arial, sans-serif" font-size="10" font-weight="700" letter-spacing="3">TODAY</text>
+  <text x="611" y="133" text-anchor="middle" fill="#b9b0a4" font-family="Arial, sans-serif" font-size="10" font-weight="700" letter-spacing="3">WEEK</text>
+  <rect x="305" y="188" width="193" height="84" rx="17" fill="#302e27"/>
+  <rect x="508" y="188" width="193" height="84" rx="17" fill="#302e27"/>
+  <text x="340" y="214" fill="#c8c1b5" font-family="Arial, sans-serif" font-size="10" font-weight="700" letter-spacing="4">CALENDAR</text>
+  <text x="317" y="244" fill="#f8efe1" font-family="Arial, sans-serif" font-size="20" font-weight="700">Clear</text>
+  <text x="317" y="262" fill="#aaa196" font-family="Arial, sans-serif" font-size="13">No calendar pressure</text>
+  <text x="543" y="214" fill="#c8c1b5" font-family="Arial, sans-serif" font-size="10" font-weight="700" letter-spacing="4">WEATHER</text>
+  <text x="522" y="244" fill="#f8efe1" font-family="Arial, sans-serif" font-size="20" font-weight="700">72F</text>
+  <text x="522" y="262" fill="#aaa196" font-family="Arial, sans-serif" font-size="13">Clear</text>
+  <text x="809" y="190" fill="#f8efe1" font-family="Arial, sans-serif" font-size="22" font-weight="700">8:51 PM</text>
+  <text x="800" y="212" fill="#aaa196" font-family="Arial, sans-serif" font-size="10" letter-spacing="4">LOCAL TIME</text>
+  <text x="574" y="354" fill="#f8efe1" font-family="Arial, sans-serif" font-size="13" font-weight="700" letter-spacing="5">SCHEDULE</text>
+  <rect x="767" y="340" width="46" height="21" rx="10" fill="#302e27"/>
+  <text x="790" y="355" text-anchor="middle" fill="#b9b0a4" font-family="Arial, sans-serif" font-size="9" font-weight="700">WEEK</text>
+  <rect x="820" y="340" width="40" height="21" rx="10" fill="#302e27"/>
+  <text x="840" y="355" text-anchor="middle" fill="#b9b0a4" font-family="Arial, sans-serif" font-size="9" font-weight="700">LIST</text>
+  <text x="731" y="563" text-anchor="middle" fill="#918a80" font-family="Arial, sans-serif" font-size="10" font-weight="700" letter-spacing="4">CALENDAR READY</text>
+  <text x="118" y="794" fill="#f8efe1" font-family="Arial, sans-serif" font-size="13" font-weight="700" letter-spacing="5">MESSAGES</text>
+  <rect x="215" y="779" width="76" height="22" rx="11" fill="#302e27"/>
+  <text x="253" y="794" text-anchor="middle" fill="#b9b0a4" font-family="Arial, sans-serif" font-size="9" font-weight="700">#GENERAL</text>
+  <text x="416" y="782" fill="#b9b0a4" font-family="Arial, sans-serif" font-size="13">Sample location</text>
+  <text x="416" y="833" fill="#f8efe1" font-family="Arial, sans-serif" font-size="54">72F</text>
+  <circle cx="651" cy="789" r="20" fill="#ffd55d"/>
+</svg>

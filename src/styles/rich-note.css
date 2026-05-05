@@ -1,0 +1,79 @@
+.dashboard-rich-note-content :where(h1, h2, h3, h4) {
+  margin: 0.1rem 0 0.45rem;
+  font-weight: 800;
+  line-height: 1.12;
+}
+
+.dashboard-rich-note-editor[data-empty="true"]::before {
+  content: attr(data-placeholder);
+  color: currentColor;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.dashboard-rich-note-content h1 {
+  font-size: 1.35rem;
+}
+
+.dashboard-rich-note-content h2 {
+  font-size: 1.12rem;
+}
+
+.dashboard-rich-note-content :where(p, ul, ol, blockquote, pre) {
+  margin: 0 0 0.65rem;
+}
+
+.dashboard-rich-note-content :where(ul, ol) {
+  list-style-position: outside;
+  padding-left: 1.25rem;
+}
+
+.dashboard-rich-note-content ul {
+  list-style-type: disc;
+}
+
+.dashboard-rich-note-content ol {
+  list-style-type: decimal;
+}
+
+.dashboard-rich-note-content li {
+  margin: 0.18rem 0;
+  padding-left: 0.15rem;
+}
+
+.dashboard-rich-note-content li :where(ul, ol) {
+  margin-top: 0.25rem;
+}
+
+.dashboard-rich-note-content blockquote {
+  border-left: 3px solid var(--ether-primary);
+  padding-left: 0.75rem;
+  color: var(--ether-on-surface-variant);
+}
+
+.dashboard-rich-note-content a {
+  color: var(--ether-primary);
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.dashboard-rich-note-content img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0.65rem 0;
+  border-radius: 1rem;
+  border: 1px solid var(--ether-glass-border);
+}
+
+.dashboard-rich-note-content table {
+  width: 100%;
+  border-collapse: collapse;
+  overflow: hidden;
+  border-radius: 0.85rem;
+}
+
+.dashboard-rich-note-content :where(th, td) {
+  border: 1px solid var(--ether-glass-border);
+  padding: 0.45rem 0.55rem;
+}

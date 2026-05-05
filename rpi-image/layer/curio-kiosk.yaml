@@ -1,0 +1,41 @@
+# METABEGIN
+# X-Env-Layer-Name: curio-kiosk
+# X-Env-Layer-Desc: Curio Robot kiosk mode (Cage + Chromium)
+# X-Env-Layer-Version: 1.1.0
+# X-Env-Layer-Requires: bookworm-minbase,
+#  rpi-user-credentials,
+#  rpi-essential-base,
+#  rpi-boot-firmware,
+#  systemd-net-min
+# METAEND
+---
+mmdebstrap:
+  packages:
+    - nginx
+    - cage
+    - chromium-browser
+    - pipewire
+    - pipewire-pulse
+    - wireplumber
+    - fonts-noto-core
+    - fonts-noto-color-emoji
+    - libgles2-mesa
+    # Node for the bundled Nova Sonic proxy
+    - nodejs
+    - npm
+
+  customize-hooks:
+    # 1. Copy the setup script and the built web app into the rootfs.
+    #    build-image.sh populates layer/curio-kiosk/files/ before invoking
+    #    rpi-image-gen from the repository root.
+    - install -Dm755 "$IGROOT/layer/curio-kiosk/files/setup-kiosk.sh" "$1/tmp/setup-kiosk.sh"
+    - mkdir -p "$1/tmp/curio-dist" && cp -a "$IGROOT/layer/curio-kiosk/files/dist/." "$1/tmp/curio-dist/"
+    - install -Dm644 "$IGROOT/layer/curio-kiosk/files/nova-proxy.mjs" "$1/tmp/nova-proxy.mjs"
+    - install -Dm644 "$IGROOT/layer/curio-kiosk/files/nova-proxy-package.json" "$1/tmp/nova-proxy-package.json"
+
+    # 2. Run the setup script inside the chroot as root (setup-kiosk.sh
+    #    requires root for apt-get, useradd, systemctl, etc.).
+    - chroot $1 bash /tmp/setup-kiosk.sh /tmp/curio-dist
+
+    # 3. Clean up.
+    - chroot $1 rm -rf /tmp/curio-dist /tmp/setup-kiosk.sh /tmp/nova-proxy.mjs /tmp/nova-proxy-package.json

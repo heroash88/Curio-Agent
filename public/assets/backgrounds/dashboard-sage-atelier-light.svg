@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0" stop-color="#f4ead8"/>
+      <stop offset="0.48" stop-color="#d7eadb"/>
+      <stop offset="1" stop-color="#a9c4d8"/>
+    </linearGradient>
+    <linearGradient id="ribbon" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#9be7c4" stop-opacity="0.34"/>
+      <stop offset="0.54" stop-color="#ffffff" stop-opacity="0.32"/>
+      <stop offset="1" stop-color="#8fb9ff" stop-opacity="0.24"/>
+    </linearGradient>
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.68" numOctaves="3" seed="47"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer>
+        <feFuncA type="table" tableValues="0 0.07"/>
+      </feComponentTransfer>
+    </filter>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#bg)"/>
+  <path d="M-80 120 L420 20 L1680 612 L1680 846 L1060 728 L-80 246 Z" fill="url(#ribbon)"/>
+  <path d="M-120 675 L420 592 L1680 820 L1680 1000 L-120 1000 Z" fill="#f8fff8" opacity="0.26"/>
+  <path d="M100 170 L1510 170 M100 320 L1510 320 M100 470 L1510 470 M100 620 L1510 620 M100 770 L1510 770" stroke="#235347" stroke-opacity="0.08" stroke-width="2"/>
+  <path d="M290 -60 L160 1040 M670 -60 L540 1040 M1050 -60 L920 1040 M1430 -60 L1300 1040" stroke="#ffffff" stroke-opacity="0.28" stroke-width="2"/>
+  <rect width="1600" height="1000" filter="url(#grain)" opacity="0.75"/>
+</svg>

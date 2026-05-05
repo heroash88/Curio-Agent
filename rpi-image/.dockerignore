@@ -1,0 +1,6 @@
+.DS_Store
+.rpi-image-gen
+output
+*.img
+*.img.xz
+*.img.zst

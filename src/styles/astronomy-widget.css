@@ -1,0 +1,823 @@
+.dashboard-astronomy-widget {
+  --astronomy-accent: var(--dashboard-widget-accent, var(--ether-violet));
+  --astronomy-accent-soft: color-mix(in srgb, var(--astronomy-accent) 14%, transparent);
+  --astronomy-accent-wash: color-mix(in srgb, var(--astronomy-accent) 8%, transparent);
+  --astronomy-sun: var(--ether-amber);
+  --astronomy-sky: var(--ether-sky);
+  position: relative;
+  isolation: isolate;
+  color: var(--ether-on-surface);
+  background:
+    radial-gradient(74% 68% at 8% 0%, color-mix(in srgb, var(--astronomy-sun) 10%, transparent), transparent 58%),
+    radial-gradient(72% 68% at 100% 8%, var(--astronomy-accent-wash), transparent 62%),
+    linear-gradient(180deg, color-mix(in srgb, var(--ether-surface-container-low) 72%, transparent), transparent 76%);
+}
+
+.dashboard-astronomy-widget::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--ether-on-surface) 5%, transparent) 1px, transparent 1px),
+    linear-gradient(0deg, color-mix(in srgb, var(--ether-on-surface) 5%, transparent) 1px, transparent 1px);
+  background-size: 22px 22px;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.46), transparent 44%);
+  -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.46), transparent 44%);
+  opacity: 0.32;
+  pointer-events: none;
+}
+
+.astronomy-hero-grid,
+.astronomy-metric-grid,
+.astronomy-daylight-meter {
+  position: relative;
+  z-index: 1;
+}
+
+.astronomy-hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(4.8rem, 0.46fr);
+  gap: 0.55rem;
+  padding: 0.2rem 0.2rem 0.45rem;
+}
+
+.dashboard-astronomy-compact .astronomy-hero-grid {
+  grid-template-columns: minmax(0, 1.15fr) minmax(3.65rem, 0.5fr);
+  gap: 0.45rem;
+  padding: 0.15rem 0.15rem 0.36rem;
+}
+
+.astronomy-sun-scene {
+  position: relative;
+  min-height: clamp(5.1rem, 34cqh, 8.2rem);
+  overflow: hidden;
+  border-radius: 1.1rem;
+  border: 1px solid var(--ether-glass-border);
+  background:
+    radial-gradient(circle at var(--sun-x, 47%) var(--sun-glow-y, 50%), color-mix(in srgb, var(--astronomy-sun) 32%, transparent), transparent 23%),
+    radial-gradient(90% 82% at 100% 4%, color-mix(in srgb, var(--astronomy-accent) 14%, transparent), transparent 58%),
+    linear-gradient(180deg, color-mix(in srgb, var(--astronomy-sky) 24%, var(--ether-surface-container)) 0%, color-mix(in srgb, var(--astronomy-accent) 16%, var(--ether-control-bg)) 62%, color-mix(in srgb, var(--astronomy-sun) 12%, var(--ether-control-bg)) 100%);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ether-on-surface) 8%, transparent);
+}
+
+.dashboard-astronomy-compact .astronomy-sun-scene {
+  min-height: 4.7rem;
+  border-radius: 0.85rem;
+}
+
+.astronomy-sun-before,
+.astronomy-sun-after {
+  background:
+    radial-gradient(circle at 18% 18%, color-mix(in srgb, var(--ether-on-surface) 10%, transparent), transparent 30%),
+    radial-gradient(circle at var(--sun-x, 47%) var(--sun-glow-y, 50%), color-mix(in srgb, var(--astronomy-sun) 20%, transparent), transparent 22%),
+    linear-gradient(180deg, color-mix(in srgb, var(--astronomy-accent) 22%, #111827) 0%, color-mix(in srgb, var(--astronomy-accent) 14%, #1f2937) 58%, color-mix(in srgb, var(--astronomy-sun) 10%, var(--ether-control-bg)) 100%);
+}
+
+.astronomy-star-field span {
+  position: absolute;
+  z-index: 1;
+  width: 0.18rem;
+  height: 0.18rem;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--ether-on-surface) 78%, white);
+  box-shadow: 0 0 0.45rem color-mix(in srgb, var(--ether-on-surface) 44%, transparent);
+  animation: astronomy-star-twinkle 4.2s ease-in-out infinite;
+}
+
+.astronomy-star-field span:nth-child(1) {
+  left: 14%;
+  top: 22%;
+}
+
+.astronomy-star-field span:nth-child(2) {
+  left: 42%;
+  top: 14%;
+  animation-delay: -1.2s;
+}
+
+.astronomy-star-field span:nth-child(3) {
+  right: 19%;
+  top: 28%;
+  animation-delay: -2.4s;
+}
+
+.astronomy-star-field span:nth-child(4) {
+  right: 39%;
+  top: 45%;
+  animation-delay: -3.3s;
+}
+
+.astronomy-sun-day .astronomy-star-field {
+  opacity: 0.28;
+}
+
+.astronomy-sun-horizon {
+  position: absolute;
+  left: -12%;
+  right: -12%;
+  bottom: -22%;
+  z-index: 4;
+  height: 43%;
+  border-radius: 50% 50% 0 0;
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--astronomy-sun) 16%, transparent), color-mix(in srgb, var(--ether-surface-container) 54%, transparent)),
+    linear-gradient(90deg, color-mix(in srgb, var(--astronomy-sky) 18%, var(--ether-control-bg)), color-mix(in srgb, var(--astronomy-accent) 14%, var(--ether-control-bg)));
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ether-on-surface) 12%, transparent);
+}
+
+.astronomy-sun-arc {
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  bottom: 23%;
+  z-index: 2;
+  height: 58%;
+  border-top: 1px dashed color-mix(in srgb, var(--ether-on-surface) 24%, transparent);
+  border-radius: 9999px 9999px 0 0;
+  opacity: 0.9;
+}
+
+.astronomy-sun-orb {
+  position: absolute;
+  left: var(--sun-x, 47%);
+  bottom: var(--sun-y, 50%);
+  z-index: 3;
+  width: clamp(1.85rem, 18cqw, 3rem);
+  aspect-ratio: 1;
+  overflow: visible;
+  isolation: isolate;
+  border-radius: 9999px;
+  background: transparent;
+  box-shadow:
+    0 0 1.6rem color-mix(in srgb, var(--astronomy-sun) 44%, transparent),
+    0 0.35rem 0.9rem color-mix(in srgb, var(--astronomy-accent) 14%, transparent);
+  transform: translate(-50%, 50%);
+  animation: astronomy-sun-track-float 7.5s ease-in-out infinite;
+}
+
+.astronomy-sun-orb::before,
+.astronomy-sun-orb::after {
+  position: absolute;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.astronomy-sun-orb::before {
+  content: '';
+  inset: -22%;
+  z-index: 0;
+  background:
+    radial-gradient(circle, color-mix(in srgb, var(--astronomy-sun) 28%, transparent) 0 48%, transparent 70%),
+    repeating-conic-gradient(from 8deg, color-mix(in srgb, var(--astronomy-sun) 22%, transparent) 0 8deg, transparent 8deg 18deg);
+  opacity: 0.68;
+  animation: astronomy-sun-rays 13s linear infinite;
+}
+
+.astronomy-sun-orb::after {
+  content: '';
+  inset: -42%;
+  z-index: -1;
+  background: radial-gradient(circle, color-mix(in srgb, var(--astronomy-sun) 22%, transparent) 0 34%, transparent 68%);
+  filter: blur(0.12rem);
+  opacity: 0.76;
+  animation: weather-sun-halo 4.8s ease-in-out infinite;
+}
+
+.astronomy-sun-orb .weather-motion-sun {
+  position: absolute;
+  display: block;
+  inset: 9%;
+  z-index: 2;
+}
+
+.astronomy-weather-sun-core::before {
+  inset: -0.55rem;
+}
+
+.astronomy-weather-sun-core::after {
+  background:
+    radial-gradient(circle at 33% 28%, rgba(255, 255, 255, 0.58) 0 13%, transparent 14%),
+    radial-gradient(circle at 65% 66%, rgba(255, 137, 44, 0.28) 0 16%, transparent 17%),
+    inherit;
+}
+
+.astronomy-sky-label {
+  position: absolute;
+  left: 0.6rem;
+  right: 0.6rem;
+  bottom: 0.55rem;
+  z-index: 5;
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 0.5rem;
+  color: color-mix(in srgb, var(--ether-on-surface) 88%, white);
+  text-shadow: 0 0.16rem 0.5rem rgba(2, 6, 23, 0.28);
+}
+
+.astronomy-sky-label span {
+  font-size: 0.56rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.astronomy-sky-label strong {
+  min-width: 0;
+  overflow: hidden;
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dashboard-astronomy-compact .astronomy-sky-label {
+  display: none;
+}
+
+.astronomy-moon-card {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  overflow: hidden;
+  isolation: isolate;
+  border-radius: 1.1rem;
+  border: 1px solid var(--ether-glass-border);
+  background:
+    radial-gradient(circle at 50% 16%, color-mix(in srgb, var(--astronomy-accent) 10%, transparent), transparent 42%),
+    var(--ether-surface-container-low);
+  text-align: center;
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ether-on-surface) 7%, transparent);
+}
+
+.astronomy-moon-card::before {
+  content: '';
+  position: absolute;
+  inset: 12% -26%;
+  z-index: -1;
+  border-radius: 9999px;
+  background:
+    repeating-radial-gradient(ellipse at 50% 50%, transparent 0 18%, color-mix(in srgb, var(--astronomy-accent) 12%, transparent) 18.5% 19%, transparent 19.5% 28%),
+    radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--astronomy-accent) 8%, transparent), transparent 52%);
+  opacity: 0.68;
+  transform: rotate(-12deg);
+  animation: astronomy-orbit-sweep 19s linear infinite;
+}
+
+.astronomy-moon-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.dashboard-astronomy-compact .astronomy-moon-card {
+  gap: 0.28rem;
+  border-radius: 0.85rem;
+}
+
+.astronomy-moon-wrap {
+  position: relative;
+  display: grid;
+  width: clamp(3.15rem, 29cqw, 4.7rem);
+  aspect-ratio: 1;
+  place-items: center;
+  filter: drop-shadow(0 0.45rem 0.9rem color-mix(in srgb, var(--astronomy-accent) 16%, transparent));
+}
+
+.astronomy-moon-wrap::before {
+  content: '';
+  position: absolute;
+  inset: -17%;
+  border-radius: 9999px;
+  border: 1px solid color-mix(in srgb, var(--astronomy-accent) 18%, transparent);
+  opacity: 0.75;
+  transform: rotate(-16deg) scaleY(0.62);
+  animation: astronomy-moon-ring 9s ease-in-out infinite;
+}
+
+.astronomy-moon-wrap-compact {
+  width: clamp(2.55rem, 26cqw, 3.35rem);
+}
+
+.astronomy-moon {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 9999px;
+  background:
+    radial-gradient(circle at 36% 30%, rgba(255, 255, 255, 0.96) 0 11%, transparent 12%),
+    radial-gradient(circle at 48% 48%, #f8fafc 0 22%, #dbe4ef 50%, #9aa9bc 100%);
+  box-shadow:
+    inset -0.24rem -0.3rem 0.52rem rgba(44, 53, 68, 0.34),
+    inset 0.16rem 0.16rem 0.42rem rgba(255, 255, 255, 0.58),
+    0 0 1.45rem color-mix(in srgb, var(--astronomy-accent) 20%, transparent);
+  animation: astronomy-moon-float 7.2s ease-in-out infinite;
+}
+
+.astronomy-moon-surface {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 31% 28%, rgba(255, 255, 255, 0.34) 0 9%, transparent 10%),
+    radial-gradient(circle at 66% 62%, rgba(74, 85, 104, 0.2) 0 12%, transparent 13%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.18), transparent 45%);
+  animation: astronomy-moon-surface-shift 12s ease-in-out infinite;
+}
+
+.astronomy-moon-surface::before {
+  content: '';
+  position: absolute;
+  inset: -18%;
+  border-radius: inherit;
+  background:
+    repeating-linear-gradient(122deg, rgba(255, 255, 255, 0.16) 0 1px, transparent 1px 8px),
+    repeating-linear-gradient(32deg, rgba(51, 65, 85, 0.1) 0 1px, transparent 1px 10px);
+  opacity: 0.44;
+  animation: astronomy-lunar-grid-drift 18s linear infinite;
+}
+
+.astronomy-moon-mare,
+.astronomy-moon-crater {
+  position: absolute;
+  z-index: 1;
+  border-radius: 9999px;
+}
+
+.astronomy-moon-mare {
+  background:
+    radial-gradient(circle at 38% 34%, rgba(255, 255, 255, 0.14), transparent 32%),
+    rgba(89, 103, 128, 0.2);
+  box-shadow: inset 0.08rem 0.08rem 0.22rem rgba(51, 65, 85, 0.2);
+}
+
+.astronomy-moon-mare-a {
+  left: 20%;
+  top: 34%;
+  width: 27%;
+  height: 21%;
+  transform: rotate(-18deg);
+}
+
+.astronomy-moon-mare-b {
+  right: 18%;
+  top: 30%;
+  width: 19%;
+  height: 25%;
+  transform: rotate(14deg);
+}
+
+.astronomy-moon-mare-c {
+  left: 40%;
+  bottom: 19%;
+  width: 31%;
+  height: 18%;
+  transform: rotate(8deg);
+}
+
+.astronomy-moon::after {
+  content: '';
+  position: absolute;
+  inset: -8%;
+  z-index: 2;
+  border-radius: inherit;
+  background:
+    radial-gradient(circle at 28% 30%, rgba(255, 255, 255, 0.07), transparent 24%),
+    rgba(11, 16, 33, 0.78);
+  mix-blend-mode: multiply;
+  opacity: 0.82;
+}
+
+.astronomy-moon-new-moon::after {
+  inset: -3%;
+  opacity: 0.92;
+}
+
+.astronomy-moon-waxing-crescent::after {
+  left: -18%;
+  right: 27%;
+  border-radius: 9999px;
+}
+
+.astronomy-moon-first-quarter::after {
+  left: -6%;
+  right: 50%;
+  border-radius: 9999px 0 0 9999px;
+}
+
+.astronomy-moon-waxing-gibbous::after {
+  left: -26%;
+  right: 70%;
+  border-radius: 9999px;
+  opacity: 0.76;
+}
+
+.astronomy-moon-full-moon::after {
+  opacity: 0;
+}
+
+.astronomy-moon-waning-gibbous::after {
+  left: 70%;
+  right: -26%;
+  border-radius: 9999px;
+  opacity: 0.76;
+}
+
+.astronomy-moon-last-quarter::after {
+  left: 50%;
+  right: -6%;
+  border-radius: 0 9999px 9999px 0;
+}
+
+.astronomy-moon-waning-crescent::after {
+  left: 27%;
+  right: -18%;
+  border-radius: 9999px;
+}
+
+.astronomy-moon-crater {
+  z-index: 1;
+  background: rgba(125, 139, 158, 0.28);
+  box-shadow:
+    inset 0.08rem 0.08rem 0.18rem rgba(71, 85, 105, 0.28),
+    inset -0.04rem -0.04rem 0.12rem rgba(255, 255, 255, 0.24);
+}
+
+.astronomy-moon-crater-a {
+  left: 28%;
+  top: 29%;
+  width: 18%;
+  height: 18%;
+}
+
+.astronomy-moon-crater-b {
+  right: 27%;
+  top: 48%;
+  width: 12%;
+  height: 12%;
+}
+
+.astronomy-moon-crater-c {
+  left: 43%;
+  bottom: 22%;
+  width: 10%;
+  height: 10%;
+}
+
+.astronomy-daylight-meter {
+  height: 0.38rem;
+  margin: 0 0.2rem 0.5rem;
+  overflow: hidden;
+  border-radius: 9999px;
+  background: var(--ether-control-bg);
+  box-shadow: inset 0 0 0 1px var(--ether-glass-border);
+}
+
+.astronomy-daylight-meter span {
+  display: block;
+  height: 100%;
+  width: calc(var(--sun-progress, 0.5) * 100%);
+  min-width: 0.34rem;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--astronomy-sun), var(--ether-rose), var(--astronomy-accent));
+  box-shadow: 0 0 0.85rem color-mix(in srgb, var(--astronomy-sun) 42%, transparent);
+  transition: width 700ms ease;
+}
+
+.astronomy-metric-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+  padding: 0 0.2rem 0.2rem;
+}
+
+.dashboard-astronomy-compact .astronomy-metric-grid {
+  gap: 0.32rem;
+  padding: 0 0.5rem 0.5rem;
+}
+
+.astronomy-metric {
+  min-width: 0;
+  border-radius: 0.85rem;
+  border: 1px solid var(--ether-glass-border);
+  background: var(--ether-surface-container-low);
+  padding: 0.5rem 0.55rem;
+  color: var(--ether-on-surface);
+}
+
+.dashboard-astronomy-compact .astronomy-metric {
+  padding: 0.34rem 0.4rem;
+}
+
+.astronomy-metric span,
+.astronomy-metric strong {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.astronomy-metric span {
+  font-size: 0.55rem;
+  font-weight: 850;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ether-on-surface-variant);
+}
+
+.astronomy-metric strong {
+  margin-top: 0.12rem;
+  font-size: 0.82rem;
+  font-weight: 850;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+.dashboard-astronomy-compact .astronomy-metric strong {
+  font-size: 0.72rem;
+}
+
+.dashboard-astronomy-mini {
+  gap: 0.42rem;
+  padding: 0.12rem;
+}
+
+.astronomy-mini-top {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  min-height: 0;
+  grid-template-columns: minmax(0, 1fr) 4.65rem;
+  gap: 0.42rem;
+}
+
+.astronomy-mini-sun {
+  min-height: 4.7rem;
+}
+
+.astronomy-mini-sun .astronomy-sun-horizon {
+  bottom: -28%;
+  height: 48%;
+}
+
+.astronomy-mini-sun .astronomy-sun-arc {
+  display: none;
+}
+
+.astronomy-mini-sun .astronomy-sun-orb {
+  width: 1.65rem;
+}
+
+.astronomy-mini-status {
+  position: absolute;
+  bottom: 0.42rem;
+  left: 0.42rem;
+  right: auto;
+  z-index: 6;
+  display: grid;
+  max-width: calc(100% - 0.84rem);
+  gap: 0.04rem;
+  border: 1px solid color-mix(in srgb, var(--ether-on-surface) 22%, transparent);
+  border-radius: 0.62rem;
+  background:
+    linear-gradient(135deg, rgba(8, 13, 22, 0.78), rgba(8, 13, 22, 0.48)),
+    color-mix(in srgb, var(--astronomy-accent) 16%, transparent);
+  padding: 0.28rem 0.38rem 0.3rem;
+  box-shadow: 0 0.35rem 1rem rgba(2, 6, 23, 0.28);
+  text-shadow: 0 0.16rem 0.46rem rgba(2, 6, 23, 0.72);
+  backdrop-filter: blur(9px);
+  -webkit-backdrop-filter: blur(9px);
+}
+
+.astronomy-mini-status span {
+  overflow: hidden;
+  font-size: 0.48rem;
+  font-weight: 850;
+  letter-spacing: 0.1em;
+  line-height: 1.05;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.astronomy-mini-status strong {
+  font-size: 0.82rem;
+  font-weight: 900;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.astronomy-mini-moon {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 0.85rem;
+  border: 1px solid var(--ether-glass-border);
+  background:
+    radial-gradient(circle at 50% 0%, var(--astronomy-accent-soft), transparent 48%),
+    var(--ether-surface-container-low);
+  padding: 0.38rem;
+  text-align: center;
+}
+
+.astronomy-mini-moon .astronomy-moon-wrap-compact {
+  width: 2.15rem;
+}
+
+.astronomy-mini-moon span,
+.astronomy-mini-moon strong {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.astronomy-mini-moon span {
+  margin-top: 0.16rem;
+  font-size: 0.48rem;
+  font-weight: 850;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ether-on-surface-variant);
+}
+
+.astronomy-mini-moon strong {
+  font-size: 0.64rem;
+  font-weight: 850;
+  line-height: 1.08;
+}
+
+.astronomy-mini-daylight-meter {
+  margin-inline: 0.18rem;
+}
+
+.astronomy-mini-facts {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.28rem;
+}
+
+.astronomy-mini-facts .astronomy-metric {
+  border-radius: 0.68rem;
+  padding: 0.28rem 0.3rem;
+}
+
+.astronomy-mini-facts .astronomy-metric span {
+  font-size: 0.44rem;
+  letter-spacing: 0.08em;
+}
+
+.astronomy-mini-facts .astronomy-metric strong {
+  font-size: 0.56rem;
+  line-height: 1.05;
+}
+
+.astronomy-metric-sunrise {
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--astronomy-sun) 12%, transparent), transparent 62%),
+    var(--ether-surface-container-low);
+}
+
+.astronomy-metric-sunset {
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--ether-rose) 12%, transparent), transparent 62%),
+    var(--ether-surface-container-low);
+}
+
+.astronomy-metric-daylight {
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--astronomy-sky) 11%, transparent), transparent 62%),
+    var(--ether-surface-container-low);
+}
+
+.astronomy-metric-moon {
+  background:
+    linear-gradient(135deg, var(--astronomy-accent-soft), transparent 62%),
+    var(--ether-surface-container-low);
+}
+
+@keyframes astronomy-sun-track-float {
+  0%,
+  100% {
+    filter: saturate(1) brightness(1);
+  }
+
+  50% {
+    filter: saturate(1.12) brightness(1.08);
+  }
+}
+
+@keyframes astronomy-sun-rays {
+  0% {
+    transform: rotate(0deg) scale(0.96);
+    opacity: 0.56;
+  }
+
+  50% {
+    opacity: 0.78;
+  }
+
+  100% {
+    transform: rotate(360deg) scale(0.96);
+    opacity: 0.56;
+  }
+}
+
+@keyframes astronomy-star-twinkle {
+  0%,
+  100% {
+    transform: scale(0.72);
+    opacity: 0.35;
+  }
+
+  50% {
+    transform: scale(1.16);
+    opacity: 1;
+  }
+}
+
+@keyframes astronomy-moon-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-1deg);
+  }
+
+  50% {
+    transform: translateY(-0.18rem) rotate(1deg);
+  }
+}
+
+@keyframes astronomy-moon-surface-shift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(-1deg);
+  }
+
+  50% {
+    transform: translate3d(1.5%, -1%, 0) rotate(1deg);
+  }
+}
+
+@keyframes astronomy-lunar-grid-drift {
+  0% {
+    transform: translate3d(-2%, -1%, 0) rotate(0deg);
+  }
+
+  100% {
+    transform: translate3d(2%, 1%, 0) rotate(4deg);
+  }
+}
+
+@keyframes astronomy-orbit-sweep {
+  0% {
+    transform: rotate(-12deg);
+  }
+
+  100% {
+    transform: rotate(348deg);
+  }
+}
+
+@keyframes astronomy-moon-ring {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: rotate(-16deg) scaleY(0.62);
+  }
+
+  50% {
+    opacity: 0.9;
+    transform: rotate(-10deg) scaleY(0.68);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .astronomy-sun-orb,
+  .astronomy-sun-orb::before,
+  .astronomy-sun-orb::after,
+  .astronomy-weather-sun-core,
+  .astronomy-weather-sun-core::before,
+  .astronomy-star-field span,
+  .astronomy-moon,
+  .astronomy-moon-card::before,
+  .astronomy-moon-wrap::before,
+  .astronomy-moon-surface,
+  .astronomy-moon-surface::before {
+    animation: none;
+  }
+}

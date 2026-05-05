@@ -1,0 +1,11 @@
+version: 0.1.0
+files:
+  - url: Curio-Robot-0.1.0.dmg
+    sha512: gVu6GJwi3TxeXVLT+F8HTSkng1l0bGo3nl2bazShvasFc2LHUSGpDOwwlB9gL+yJA3I6Tcnth/RPTkKKcnecAA==
+    size: 1164777445
+  - url: Curio-Robot-0.1.0-arm64.dmg
+    sha512: mJssGHQPM+8vWa5AtCtol4aAuKHyd/M7VHjTY4U6sUk5xG+iC0y4SpMsaULyLLVNoG+rEEgx7jdwUb2FzDziFg==
+    size: 1158375245
+path: Curio-Robot-0.1.0.dmg
+sha512: gVu6GJwi3TxeXVLT+F8HTSkng1l0bGo3nl2bazShvasFc2LHUSGpDOwwlB9gL+yJA3I6Tcnth/RPTkKKcnecAA==
+releaseDate: '2026-05-03T01:47:48.545Z'

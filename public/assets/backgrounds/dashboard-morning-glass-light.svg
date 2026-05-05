@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f8f0df"/>
+      <stop offset="0.45" stop-color="#dbeaf0"/>
+      <stop offset="1" stop-color="#b8c7d9"/>
+    </linearGradient>
+    <linearGradient id="sheet" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.52"/>
+      <stop offset="0.5" stop-color="#8bd3ff" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#f7b6c9" stop-opacity="0.24"/>
+    </linearGradient>
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" seed="11"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer>
+        <feFuncA type="table" tableValues="0 0.08"/>
+      </feComponentTransfer>
+    </filter>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#bg)"/>
+  <path d="M-120 210 C260 60 450 120 760 250 C1030 364 1260 250 1720 84 L1720 338 C1280 490 1000 568 670 428 C390 310 170 296 -120 438 Z" fill="url(#sheet)"/>
+  <path d="M-100 760 C300 608 620 660 890 746 C1110 816 1340 780 1700 604 L1700 1000 L-100 1000 Z" fill="#ffffff" opacity="0.28"/>
+  <path d="M120 110 L1480 110 M80 255 L1520 255 M140 404 L1460 404 M60 548 L1540 548 M140 692 L1460 692 M80 838 L1520 838" stroke="#ffffff" stroke-opacity="0.18" stroke-width="2"/>
+  <path d="M250 -80 L830 1080 M690 -80 L1270 1080 M1120 -80 L1700 1080" stroke="#31566b" stroke-opacity="0.07" stroke-width="4"/>
+  <rect width="1600" height="1000" filter="url(#grain)" opacity="0.65"/>
+</svg>

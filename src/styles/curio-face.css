@@ -1,0 +1,606 @@
+/* ======================================== */
+/* CurioFace — 3D Glossy Robot SVG Styles   */
+/* ======================================== */
+
+/* Morphing path transitions */
+.curio-morph-path {
+  transition: d 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.curio-smooth-trans {
+  transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Eye socket transitions */
+.curio-eye-socket {
+  transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Blinking */
+.curio-eye-left-socket.curio-is-blinking,
+.curio-eye-right-socket.curio-is-blinking,
+.curio-eye-socket.curio-is-blinking {
+  transform: scaleY(0.05);
+  transition: transform 0.08s ease-in-out;
+}
+
+/* Eye sparkle catchlight — subtle twinkling */
+@keyframes curio-sparkle {
+
+  0%,
+  100% {
+    opacity: 0.9;
+    r: 5;
+  }
+
+  50% {
+    opacity: 0.4;
+    r: 3;
+  }
+}
+
+.curio-sparkle {
+  animation: curio-sparkle 3s ease-in-out infinite;
+}
+
+/* Antenna glow pulse */
+@keyframes curio-antenna-pulse {
+
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+
+  50% {
+    opacity: 0.9;
+  }
+}
+
+.curio-antenna-pulse {
+  animation: curio-antenna-pulse 2.5s ease-in-out infinite;
+}
+
+/* ═══ Emotion-reactive overlay animations ═══ */
+/* All lightweight CSS-only — no JS timers, GPU-composited transforms + opacity */
+
+/* Gentle float variants (staggered for variety) */
+@keyframes curio-emotion-float {
+
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.8;
+  }
+
+  50% {
+    transform: translateY(-6px);
+    opacity: 1;
+  }
+}
+
+.curio-emotion-float-a {
+  animation: curio-emotion-float 2.5s ease-in-out infinite;
+}
+
+.curio-emotion-float-b {
+  animation: curio-emotion-float 3s ease-in-out infinite 0.4s;
+}
+
+.curio-emotion-stars-c {
+  animation: curio-emotion-stars 4s linear infinite 1.5s;
+}
+
+/* ═══ AstroFace Specific Accessory Animations ═══ */
+
+@keyframes astro-flame-flicker {
+
+  0%,
+  100% {
+    transform: scaleY(1);
+    opacity: 0.6;
+  }
+
+  50% {
+    transform: scaleY(1.3);
+    opacity: 0.9;
+  }
+}
+
+@keyframes astro-data-scroll {
+  0% {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 0.4;
+  }
+
+  100% {
+    transform: translateY(40px);
+    opacity: 0;
+  }
+}
+
+@keyframes astro-float-bounce {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes astro-zzz-float {
+  0% {
+    transform: translate(0, 0) scale(0.5);
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 0.8;
+  }
+
+  80% {
+    opacity: 0.4;
+  }
+
+  100% {
+    transform: translate(15px, -60px) scale(1.2);
+    opacity: 0;
+  }
+}
+
+.curio-emotion-drip {
+  animation: curio-emotion-drip 2s ease-in-out infinite;
+}
+
+/* Drip / tear fall */
+@keyframes curio-emotion-drip {
+  0% {
+    transform: translateY(0);
+    opacity: 0.7;
+  }
+
+  80% {
+    transform: translateY(18px);
+    opacity: 0.3;
+  }
+
+  100% {
+    transform: translateY(0);
+    opacity: 0.7;
+  }
+}
+
+/* Floating hearts — rise and fade */
+@keyframes curio-emotion-heart-rise {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0.9;
+  }
+
+  50% {
+    transform: translateY(-12px) scale(1.1);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(-24px) scale(0.8);
+    opacity: 0.3;
+  }
+}
+
+.curio-emotion-heart-a {
+  animation: curio-emotion-heart-rise 2.5s ease-in-out infinite;
+}
+
+.curio-emotion-heart-b {
+  animation: curio-emotion-heart-rise 3s ease-in-out infinite 0.5s;
+}
+
+.curio-emotion-heart-c {
+  animation: curio-emotion-heart-rise 3.5s ease-in-out infinite 1s;
+}
+
+/* Sparkle ping — scale in/out */
+@keyframes curio-emotion-sparkle {
+
+  0%,
+  100% {
+    transform: scale(0.6);
+    opacity: 0.3;
+  }
+
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+}
+
+.curio-emotion-sparkle-ping {
+  animation: curio-emotion-sparkle 1.5s ease-in-out infinite;
+}
+
+/* Continuous Gentle Floating */
+@keyframes curio-float {
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.curio-head-float {
+  animation: curio-float 5s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* Low-power: disable expensive infinite CSS animations on the face */
+.curio-svg-face.curio-low-power .curio-head-float {
+  animation: none;
+  will-change: auto;
+}
+
+.curio-svg-face.curio-low-power .curio-sparkle {
+  animation: none;
+  opacity: 0.7;
+}
+
+.curio-svg-face.curio-low-power .curio-antenna-pulse {
+  animation: none;
+  opacity: 0.6;
+}
+
+.curio-svg-face.curio-low-power .curio-morph-path {
+  transition: d 0.8s ease;
+}
+
+.curio-svg-face.curio-low-power .curio-smooth-trans {
+  transition: all 0.8s ease;
+}
+
+/* --- Listening Mode: Ear Pumping Animation --- */
+@keyframes curio-ear-pump {
+
+  0%,
+  100% {
+    transform: scaleY(1);
+    filter: drop-shadow(0 0 8px #38bdf8);
+  }
+
+  50% {
+    transform: scaleY(1.35);
+    filter: drop-shadow(0 0 25px #38bdf8);
+  }
+}
+
+.mode-listening #curio-ear-glow-left {
+  animation: curio-ear-pump 0.7s infinite ease-in-out;
+  transform-origin: 55px 200px;
+}
+
+.mode-listening #curio-ear-glow-right {
+  animation: curio-ear-pump 0.7s infinite ease-in-out;
+  transform-origin: 545px 200px;
+}
+
+/* --- Physical Behaviour Animations --- */
+@keyframes curio-head-nod {
+
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+
+  25% {
+    transform: translateY(12px) rotate(1deg);
+  }
+
+  75% {
+    transform: translateY(-15px) rotate(-1deg);
+  }
+}
+
+.curio-anim-nod {
+  animation: curio-head-nod 0.6s cubic-bezier(0.4, 0, 0.2, 1) 2;
+}
+
+@keyframes curio-head-bob {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.curio-anim-bob {
+  animation: curio-head-bob 0.4s ease-in-out 3;
+}
+
+/* --- Astro Face Specific Amplified Animations --- */
+/* The Astroface viewBox is expanded so internal SVG units are much smaller visually */
+@keyframes astro-float {
+
+  0%,
+  100% {
+    transform: translateY(0px) scale(1.0);
+  }
+
+  50% {
+    transform: translateY(-20px) scale(1.01);
+  }
+}
+
+.astro-head-float {
+  animation: astro-float 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  will-change: transform;
+  transform-box: fill-box;
+}
+
+@keyframes astro-head-nod {
+
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+
+  25% {
+    transform: translateY(22px) rotate(2deg);
+  }
+
+  75% {
+    transform: translateY(-18px) rotate(-1deg);
+  }
+}
+
+.astro-anim-nod {
+  animation: astro-head-nod 0.6s cubic-bezier(0.4, 0, 0.2, 1) 2;
+}
+
+@keyframes astro-head-bob {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+.astro-anim-bob {
+  animation: astro-head-bob 0.4s ease-in-out 3;
+}
+
+
+/* --- Music Player Bars --- */
+@keyframes music-bar {
+
+  0%,
+  100% {
+    height: 2px;
+  }
+
+  50% {
+    height: 100%;
+  }
+}
+
+.animate-music-bar-1 {
+  animation: music-bar 0.8s ease-in-out infinite;
+}
+
+.animate-music-bar-2 {
+  animation: music-bar 0.8s ease-in-out infinite 0.2s;
+}
+
+.animate-music-bar-3 {
+  animation: music-bar 0.8s ease-in-out infinite 0.4s;
+}
+
+/* --- CurioFace SVG Accessory Animations --- */
+@keyframes curio-zzz-float {
+
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 0.6;
+  }
+
+  50% {
+    transform: translateY(-12px) scale(1.08);
+    opacity: 1;
+  }
+}
+
+@keyframes astro-zzz-float {
+
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 0.6;
+  }
+
+  50% {
+    transform: translateY(-36px) scale(1.15);
+    opacity: 1;
+  }
+}
+
+@keyframes curio-note-float {
+
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0.7;
+  }
+
+  25% {
+    transform: translateY(-8px) rotate(-5deg);
+    opacity: 1;
+  }
+
+  75% {
+    transform: translateY(4px) rotate(5deg);
+    opacity: 0.8;
+  }
+}
+
+@keyframes astro-note-float {
+
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0.7;
+  }
+
+  25% {
+    transform: translateY(-24px) rotate(-5deg);
+    opacity: 1;
+  }
+
+  75% {
+    transform: translateY(12px) rotate(5deg);
+    opacity: 0.8;
+  }
+}
+
+@keyframes curio-halo-bob {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes astro-halo-bob {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+@keyframes curio-confetti-fall {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(280px) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+@keyframes astro-confetti-fall {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(600px) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+@keyframes curio-propeller-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes curio-gum-inflate {
+  0% {
+    transform: scale(0.3);
+  }
+
+  50% {
+    transform: scale(1.15);
+  }
+
+  80% {
+    transform: scale(1.05);
+  }
+
+  100% {
+    transform: scale(0.3);
+  }
+}
+
+@keyframes marquee-rtl {
+  0% {
+    transform: translateX(100%);
+  }
+
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.animate-marquee-rtl {
+  display: inline-block;
+  white-space: nowrap;
+  animation: marquee-rtl 10s linear infinite;
+}
+
+@keyframes pulse-slow {
+
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(1.1);
+  }
+
+  50% {
+    opacity: 0.5;
+    transform: scale(1.2);
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 6s ease-in-out infinite;
+}
+
+@keyframes text-breath {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(0.96);
+  }
+}
+
+.animate-text-breath {
+  animation: text-breath 4s ease-in-out infinite;
+  transform-origin: left center;
+}

@@ -1,0 +1,21 @@
+# Curio Robot image config.
+# Layered on top of the official bookworm-minbase template:
+#   device.layer: rpi5            (Raspberry Pi 5 target)
+#   image.layer:  image-rpios     (standard RPi OS image layout)
+#   layer.base:   bookworm-minbase (Debian Bookworm + apt + ssh)
+#   layer.app:    curio-kiosk     (our custom kiosk layer)
+#
+# See rpi-image/.rpi-image-gen/config/bookworm-minbase.yaml for the reference.
+
+device:
+  layer: rpi5
+
+image:
+  layer: image-rpios
+  name: curio-rpi
+  boot_part_size: 200%
+  root_part_size: 150%
+
+layer:
+  base: bookworm-minbase
+  app: curio-kiosk

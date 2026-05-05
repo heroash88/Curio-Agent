@@ -1,0 +1,9 @@
+build_from:
+  aarch64: ghcr.io/home-assistant/aarch64-base:3.21
+  amd64: ghcr.io/home-assistant/amd64-base:3.21
+  armv7: ghcr.io/home-assistant/armv7-base:3.21
+labels:
+  org.opencontainers.image.title: "Curio Robot"
+  org.opencontainers.image.description: "Curio - Voice-powered AI assistant with 30+ response cards"
+  io.hass.type: addon
+  io.hass.version: "0.1.1"

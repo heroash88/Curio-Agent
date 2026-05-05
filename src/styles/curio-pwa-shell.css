@@ -1,0 +1,121 @@
+.curio-app-root,
+.curio-pwa-shell {
+  min-height: 0;
+  width: 100%;
+  background: var(--ether-surface);
+}
+
+.curio-pwa-shell {
+  position: relative;
+  height: 100vh;
+  height: var(--pwa-viewport-height);
+  min-height: var(--pwa-viewport-height);
+  max-height: var(--pwa-viewport-height);
+  overflow: clip;
+  overflow-clip-margin: var(--pwa-bottom-bleed);
+  isolation: isolate;
+}
+
+.curio-pwa-shell::before {
+  content: "";
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: calc(-1 * var(--pwa-bottom-bleed));
+  z-index: -1;
+  background: inherit;
+  pointer-events: none;
+}
+
+@supports not (overflow: clip) {
+  .curio-pwa-shell {
+    overflow: hidden;
+  }
+}
+
+@supports (-webkit-touch-callout: none) {
+  .curio-pwa-shell {
+    min-height: -webkit-fill-available;
+  }
+}
+
+.curio-face-chat-hotspot {
+  bottom: var(--curio-face-chat-bottom);
+  right: calc(1rem + var(--pwa-safe-right));
+  z-index: 90;
+  width: 5rem;
+  height: 5rem;
+  pointer-events: auto;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.curio-face-chat-toggle {
+  pointer-events: none;
+}
+
+.curio-face-status-stack {
+  bottom: var(--curio-face-status-bottom);
+}
+
+.curio-face-status-stack[data-placement="top"] {
+  bottom: auto;
+  top: calc(6rem + var(--pwa-safe-top));
+}
+
+.curio-face-status-stack[data-connect-position="top"][data-placement="top"] {
+  top: calc(9rem + var(--pwa-safe-top));
+}
+
+.curio-face-status-stack[data-mini-player="true"][data-placement="bottom"],
+.curio-face-status-stack[data-connect-position="bottom"][data-placement="bottom"] {
+  bottom: var(--curio-face-status-bottom-raised);
+}
+
+.curio-face-transcript-overlay {
+  bottom: var(--curio-face-transcript-bottom-with-input);
+  max-height: calc(var(--pwa-viewport-height) - var(--pwa-safe-top) - var(--pwa-safe-bottom) - 14rem);
+}
+
+.curio-face-transcript-overlay[data-text-input-open="true"] {
+  bottom: var(--curio-face-transcript-bottom-with-input);
+  max-height: calc(var(--pwa-viewport-height) - var(--pwa-safe-top) - var(--pwa-safe-bottom) - 14rem);
+}
+
+.curio-face-text-input {
+  bottom: var(--curio-face-text-bottom);
+  max-height: calc(var(--pwa-viewport-height) - var(--pwa-safe-top) - var(--pwa-safe-bottom) - 2rem);
+  z-index: 95;
+  pointer-events: auto;
+  touch-action: manipulation;
+}
+
+.curio-face-connect-controls {
+  bottom: var(--curio-face-connect-bottom);
+}
+
+.curio-face-connect-controls[data-position="top"] {
+  bottom: auto;
+}
+
+.curio-face-connect-controls[data-mini-player="true"] {
+  bottom: var(--curio-face-connect-bottom-with-media);
+}
+
+.curio-face-version-label {
+  bottom: calc(0.5rem + var(--pwa-safe-bottom));
+}
+
+@media (max-height: 520px) {
+  :root {
+    --curio-face-text-bottom: calc(var(--curio-face-bottom-reserve) + 4.25rem + var(--pwa-keyboard-bottom));
+    --curio-face-transcript-bottom-with-input: calc(var(--curio-face-text-bottom) + 4.25rem);
+    --curio-face-status-bottom: calc(var(--curio-face-bottom-reserve) + 4.75rem);
+    --curio-face-status-bottom-raised: calc(var(--curio-face-bottom-reserve) + 6.5rem);
+  }
+
+  .curio-face-transcript-overlay {
+    max-height: 24dvh;
+  }
+}

@@ -1,0 +1,181 @@
+/* ======================================== */
+/* EtherOS Glass — Design Token System      */
+/* ======================================== */
+
+:root {
+  --pwa-safe-top: env(safe-area-inset-top, 0px);
+  --pwa-safe-right: env(safe-area-inset-right, 0px);
+  --pwa-safe-bottom: env(safe-area-inset-bottom, 0px);
+  --pwa-safe-left: env(safe-area-inset-left, 0px);
+  --pwa-viewport-height: 100dvh;
+  --pwa-bleed-height: 100lvh;
+  --pwa-bottom-bleed: max(6rem, var(--pwa-safe-bottom));
+  --pwa-keyboard-bottom: env(keyboard-inset-height, 0px);
+  --curio-face-bottom-reserve: max(1rem, var(--pwa-safe-bottom));
+  --curio-face-chat-bottom: calc(var(--curio-face-bottom-reserve) + clamp(0.75rem, 2dvh, 1.5rem));
+  --curio-face-text-bottom: calc(var(--curio-face-bottom-reserve) + clamp(5.5rem, 10dvh, 7rem) + var(--pwa-keyboard-bottom));
+  --curio-face-transcript-bottom: calc(var(--curio-face-bottom-reserve) + clamp(1rem, 3dvh, 2.25rem));
+  --curio-face-transcript-bottom-with-input: calc(var(--curio-face-text-bottom) + clamp(4.75rem, 9dvh, 6.5rem));
+  --curio-face-status-bottom: calc(var(--curio-face-bottom-reserve) + clamp(5.5rem, 10dvh, 7rem));
+  --curio-face-status-bottom-raised: calc(var(--curio-face-bottom-reserve) + clamp(8.5rem, 15dvh, 10rem));
+  --curio-face-connect-bottom: calc(var(--curio-face-bottom-reserve) + clamp(1.5rem, 4dvh, 2.5rem));
+  --curio-face-connect-bottom-with-media: calc(var(--curio-face-bottom-reserve) + clamp(8rem, 14dvh, 10rem));
+
+  /* Surface hierarchy */
+  --ether-surface: #0f0e0c;
+  --ether-surface-dim: #0a0908;
+  --ether-surface-container-lowest: rgba(255, 244, 225, 0.035);
+  --ether-surface-container-low: rgba(255, 244, 225, 0.055);
+  --ether-surface-container: rgba(255, 244, 225, 0.075);
+  --ether-surface-container-high: rgba(255, 244, 225, 0.105);
+  --ether-surface-container-highest: rgba(255, 244, 225, 0.14);
+  --ether-surface-bright: rgba(255, 244, 225, 0.18);
+
+  /* Text hierarchy */
+  --ether-on-surface: #f5f0e6;
+  --ether-on-surface-variant: #aaa399;
+  --ether-outline: #736b60;
+  --ether-outline-variant: rgba(255, 244, 225, 0.1);
+
+  /* Category accents */
+  --ether-primary: #39b8fd;
+  --ether-primary-container: #1faaef;
+  --ether-sky: #39b8fd;
+  --ether-secondary: #ac8aff;
+  --ether-secondary-container: #5516be;
+  --ether-violet: #a78bfa;
+  --ether-tertiary: #ff6daf;
+  --ether-tertiary-container: #fa53a4;
+  --ether-pink: #ff6daf;
+  --ether-rose: #fb7185;
+  --ether-indigo: #818cf8;
+  --ether-slate: #94a3b8;
+  --ether-error: #ff6e84;
+  --ether-error-dim: #d73357;
+  --ether-emerald: #10b981;
+  --ether-amber: #f59e0b;
+  --ether-teal: #14b8a6;
+
+  /* Glassmorphism */
+  --ether-glass-bg: rgba(25, 23, 19, 0.92);
+  --ether-glass-border: rgba(255, 244, 225, 0.1);
+  --ether-glass-blur: 16px;
+  --ether-glass-shadow: 0 16px 44px rgba(0, 0, 0, 0.28);
+  --ether-overlay-panel: #171512;
+  --ether-control-bg: rgba(255, 244, 225, 0.055);
+  --ether-control-hover: rgba(255, 244, 225, 0.1);
+  --ether-control-active-bg: #f4ede1;
+  --ether-control-active-text: #17130f;
+  --ether-control-border: rgba(255, 244, 225, 0.1);
+
+  /* Widget accent bleed intensity */
+  --ether-bleed-intensity: 0.12;
+  --ether-bleed-bloom: 0.14;
+
+  /* Card corners */
+  --ether-card-radius: 2rem;
+  --ether-inner-radius: 1.45rem;
+
+  /* Spacing */
+  --ether-gap: 18px;
+
+  /* Native dashboard dropdowns */
+  --dashboard-select-color-scheme: dark;
+  --dashboard-select-menu-bg: #171512;
+}
+
+/* Light mode overrides */
+.light-mode,
+[data-theme="light"] {
+  --ether-surface: #f7f8fb;
+  --ether-surface-dim: #eef2f7;
+  --ether-surface-container-lowest: #ffffff;
+  --ether-surface-container-low: #fbfcff;
+  --ether-surface-container: #ffffff;
+  --ether-surface-container-high: #ffffff;
+  --ether-surface-container-highest: #ffffff;
+  --ether-surface-bright: #ffffff;
+
+  --ether-on-surface: #28231e;
+  --ether-on-surface-variant: #625a50;
+  --ether-outline: #8c8577;
+  --ether-outline-variant: rgba(61, 71, 86, 0.16);
+
+  --ether-glass-bg: rgba(255, 255, 255, 0.64);
+  --ether-glass-border: rgba(255, 255, 255, 0.7);
+  --ether-glass-blur: 22px;
+  --ether-glass-shadow: 0 14px 48px rgba(44, 58, 80, 0.088), 0 3px 16px rgba(44, 58, 80, 0.045), inset 0 1px 0 rgba(255, 255, 255, 0.68);
+  --ether-overlay-panel: rgba(255, 255, 255, 0.84);
+  --ether-control-bg: rgba(255, 255, 255, 0.66);
+  --ether-control-hover: rgba(255, 255, 255, 0.78);
+  --ether-control-active-bg: #27231e;
+  --ether-control-active-text: #fbf6ec;
+  --ether-control-border: #e7edf5;
+
+  --ether-bleed-intensity: 0.07;
+  --ether-bleed-bloom: 0.08;
+  --dashboard-select-color-scheme: light;
+  --dashboard-select-menu-bg: #fffdf8;
+}
+
+/* Card theme override.
+ * Response cards render in a fixed-position stack outside the current
+ * screen subtree. When a surface (such as the Dashboard) has its own
+ * per-page theme different from the app-level theme, it broadcasts the
+ * effective card theme via `data-card-theme` on <html> so cards stay in
+ * sync with whichever light/dark mode the user is actually viewing.
+ * Tokens are scoped to `.card-glass` so only cards (and any descendants
+ * reading the tokens) flip — other surfaces keep their own themes. */
+html[data-card-theme="light"] .card-glass {
+  --ether-surface: #f7f8fb;
+  --ether-surface-dim: #eef2f7;
+  --ether-surface-container-lowest: #ffffff;
+  --ether-surface-container-low: #fbfcff;
+  --ether-surface-container: #ffffff;
+  --ether-surface-container-high: #ffffff;
+  --ether-surface-container-highest: #ffffff;
+  --ether-surface-bright: #ffffff;
+
+  --ether-on-surface: #28231e;
+  --ether-on-surface-variant: #625a50;
+  --ether-outline: #8c8577;
+  --ether-outline-variant: rgba(61, 71, 86, 0.16);
+
+  --ether-glass-bg: rgba(255, 255, 255, 0.64);
+  --ether-glass-border: rgba(255, 255, 255, 0.7);
+  --ether-glass-blur: 22px;
+  --ether-glass-shadow: 0 14px 48px rgba(44, 58, 80, 0.088), 0 3px 16px rgba(44, 58, 80, 0.045), inset 0 1px 0 rgba(255, 255, 255, 0.68);
+  --ether-overlay-panel: rgba(255, 255, 255, 0.84);
+  --ether-control-bg: rgba(255, 255, 255, 0.66);
+  --ether-control-hover: rgba(255, 255, 255, 0.78);
+  --ether-control-active-bg: #27231e;
+  --ether-control-active-text: #fbf6ec;
+  --ether-control-border: #e7edf5;
+}
+
+html[data-card-theme="dark"] .card-glass {
+  --ether-surface: #0f0e0c;
+  --ether-surface-dim: #0a0908;
+  --ether-surface-container-lowest: rgba(255, 244, 225, 0.035);
+  --ether-surface-container-low: rgba(255, 244, 225, 0.055);
+  --ether-surface-container: rgba(255, 244, 225, 0.075);
+  --ether-surface-container-high: rgba(255, 244, 225, 0.105);
+  --ether-surface-container-highest: rgba(255, 244, 225, 0.14);
+  --ether-surface-bright: rgba(255, 244, 225, 0.18);
+
+  --ether-on-surface: #f5f0e6;
+  --ether-on-surface-variant: #aaa399;
+  --ether-outline: #736b60;
+  --ether-outline-variant: rgba(255, 244, 225, 0.1);
+
+  --ether-glass-bg: rgba(25, 23, 19, 0.92);
+  --ether-glass-border: rgba(255, 244, 225, 0.1);
+  --ether-glass-blur: 16px;
+  --ether-glass-shadow: 0 16px 44px rgba(0, 0, 0, 0.28);
+  --ether-overlay-panel: #171512;
+  --ether-control-bg: rgba(255, 244, 225, 0.055);
+  --ether-control-hover: rgba(255, 244, 225, 0.1);
+  --ether-control-active-bg: #f4ede1;
+  --ether-control-active-text: #17130f;
+  --ether-control-border: rgba(255, 244, 225, 0.1);
+}

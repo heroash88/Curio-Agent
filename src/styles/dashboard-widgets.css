@@ -1,0 +1,1142 @@
+/* -------------------------------------------------------------------------
+ * Dashboard widget guardrails.
+ *
+ * These rules apply to every widget body so individual widgets do not have
+ * to remember the same safety invariants. They are all written with
+ * :where() so specificity is zero - any widget that explicitly sets a
+ * competing property still wins.
+ *
+ * What they prevent:
+ *   - Rogue overflow. Every widget body has min-w-0 and min-h-0 so flex
+ *     children cannot push the card wider than its frame.
+ *   - Body text overflowing the card. `overflow-wrap: anywhere` + `word-break`
+ *     break long unbroken tokens (URLs, IDs) so titles and captions do not
+ *     push siblings off-screen.
+ *   - The 3-dot action menu being overlapped. A safe-area pad is reserved
+ *     above the action menu zone.
+ *   - Unintended horizontal scroll at the body level.
+ * ------------------------------------------------------------------------- */
+
+:where(.dashboard-widget-body) {
+  /* Belt-and-suspenders with the inline flex classes. */
+  min-width: 0;
+  min-height: 0;
+  /* Body-level horizontal scroll is never intentional on a dashboard widget;
+     widgets that legitimately need horizontal scrolling create their own
+     inner scroll container. */
+  overflow-x: clip;
+}
+
+:where(.dashboard-widget-body) > :where(*) {
+  /* Every direct child of a widget body participates in a flex column, so
+     min-width: 0 is required to let truncation and ellipsis work inside
+     children that themselves use flex. This is the single biggest source of
+     "widget is too wide" bugs across the codebase. */
+  min-width: 0;
+}
+
+:where(.dashboard-widget-body) :where(p, span, div, strong, em, h1, h2, h3, h4, h5, h6, li, a, button, label) {
+  /* Long unbroken tokens (URLs, IDs, filenames) must wrap rather than force
+     their parent container wider. `anywhere` is more aggressive than
+     `break-word` and is exactly what we want for cramped widget surfaces. */
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+/* Tabular and monospaced numeric readouts and any element a widget has
+   explicitly opted into "no wrap" for keep their behavior. */
+:where(.dashboard-widget-body) :where(
+  [class*="tabular-nums"],
+  [class*="whitespace-nowrap"],
+  [class*="font-mono"],
+  pre,
+  code,
+  kbd
+) {
+  overflow-wrap: normal;
+  word-break: keep-all;
+}
+
+/* Respect explicit no-wrap utility without letting it leak specificity. */
+:where(.dashboard-widget-body) :where([class*="whitespace-nowrap"]) {
+  white-space: nowrap;
+}
+
+/* Truncate helpers inside widgets should always succeed. The legacy
+   Tailwind `truncate` utility already sets overflow: hidden, but we make
+   sure min-width: 0 is honored on the truncated element's parent flex
+   row. */
+:where(.dashboard-widget-body) :where(.truncate) {
+  min-width: 0;
+}
+
+/* Action safe area.
+   When a widget opts in via actionSafeArea, reserve the top-right footprint
+   of the 3-dot menu so widget chrome/content never slides under it. The
+   action button lives at right: 0.75rem top: 1rem (sm: 1rem / 1.25rem) and
+   is 2rem tall, so 3.5rem of horizontal room at the top is comfortable. */
+:where([data-action-safe-area="true"]) {
+  /* Prefer scoped padding so body primitives and custom bare widgets
+     get the same treatment. Primitives already add this via Tailwind
+     classes; the rule here is the safety net for anything bypassed. */
+  padding-right: max(var(--dashboard-widget-action-safe, 2.5rem), 2.5rem);
+}
+
+/* Scroll opt-in.
+   Widgets must opt into scrolling via data-scroll="y" or data-scroll="x".
+   Anything else defaults to overflow: clip at the body boundary so a
+   runaway child cannot introduce accidental scrollbars. */
+:where(.dashboard-widget-body[data-scroll]):not([data-scroll="none"]) {
+  /* No-op: opt-in widgets keep their own overflow rules. */
+}
+
+/* -------------------------------------------------------------------------
+ * Compact-size safeties.
+ *
+ * These guard the common class of bug where a small widget (2x2, 1x2, a
+ * short freeform rect) gets its bottom button pushed under the card's
+ * rounded corner. We bind the bottom padding to a CSS variable so widgets
+ * that opt into the `data-widget-primitive="footer"` element (or custom
+ * widgets that set the attribute manually) can trust there is always at
+ * least one padding unit between their footer and the card edge.
+ * ------------------------------------------------------------------------- */
+
+/* Widget footers always end inside the card. Using padding-bottom on the
+   shell body (not the footer) keeps WidgetShell's existing padding rules
+   intact while adding a guaranteed breathing zone beneath any pinned
+   footer. */
+:where(.dashboard-widget-body):has(:where([data-widget-primitive="footer"])) {
+  padding-bottom: max(1rem, env(safe-area-inset-bottom, 0px));
+}
+
+/* Block the anti-pattern that broke Music at 2x2: using
+   `justify-content: space-between` on the direct body column when content
+   exceeds the available height. `space-between` pins children to the
+   extremes, which overflows the rounded bottom when the middle block is
+   already taller than the body. We only override when the body is short
+   enough that the pattern reliably fails; taller widgets keep their
+   designer-intended spacing.
+
+   Widgets that truly need justify-between can opt out with
+   data-layout-allow-between="true". */
+:where(.dashboard-widget-body) > :where(
+  .flex.flex-col.justify-between,
+  .flex.min-h-0.flex-col.justify-between,
+  .flex.flex-1.flex-col.justify-between,
+  .flex.min-h-0.flex-1.flex-col.justify-between
+):not([data-layout-allow-between="true"]) {
+  /* Replace the extremes-pinning with natural flow so siblings stack
+     within the body. Widgets that want a real bottom pin should use the
+     WidgetFooter primitive (mt-auto + shrink-0), which is a safer
+     expression of the same intent. */
+  justify-content: flex-start;
+}
+
+/* Body headings over size 1.25rem in narrow widgets (roughly 2 grid cells
+   wide or freeform equivalents <= 280px) are almost always bugs: the
+   title eats the middle and the footer clips. Clamp heading sizes when
+   the body is narrow. Designer-set inline font sizes still win. */
+@container (max-width: 280px) {
+  :where(.dashboard-widget-body) :where(h1, h2, h3) {
+    font-size: clamp(0.95rem, 5.5cqw, 1.25rem);
+    line-height: 1.2;
+  }
+}
+
+/* Enable container queries for every widget body so the heading clamp
+   above activates on the body's own width rather than the viewport. */
+.dashboard-widget-body {
+  container-type: inline-size;
+}
+
+
+
+.dashboard-widget-control-button {
+  display: inline-flex;
+  width: 2rem;
+  height: 2rem;
+  min-width: 2rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--ether-glass-border);
+  border-radius: 9999px;
+  background: var(--ether-control-bg);
+  color: var(--ether-on-surface-variant);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--ether-on-surface) 8%, transparent),
+    0 0.18rem 0.5rem rgba(2, 6, 23, 0.08);
+  line-height: 1;
+  padding: 0;
+  transition:
+    background-color 170ms ease,
+    border-color 170ms ease,
+    box-shadow 170ms ease,
+    color 170ms ease,
+    transform 170ms ease;
+}
+
+.dashboard-widget-control-button:hover,
+.dashboard-widget-control-button:focus-visible {
+  border-color: color-mix(in srgb, var(--ether-primary) 28%, var(--ether-glass-border));
+  background: var(--ether-control-hover);
+  color: var(--ether-on-surface);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--ether-on-surface) 12%, transparent),
+    0 0.28rem 0.75rem rgba(2, 6, 23, 0.12);
+}
+
+.dashboard-widget-control-button:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--ether-primary) 34%, transparent);
+  outline-offset: 2px;
+}
+
+.dashboard-widget-control-button:active {
+  transform: scale(0.95);
+}
+
+.dashboard-widget-control-button-active,
+.dashboard-widget-control-button[aria-expanded="true"],
+.dashboard-widget-control-button[aria-pressed="true"] {
+  border-color: color-mix(in srgb, var(--ether-primary) 38%, var(--ether-glass-border));
+  background: color-mix(in srgb, var(--ether-primary) 14%, var(--ether-control-bg));
+  color: var(--ether-on-surface);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, white 15%, transparent),
+    0 0.24rem 0.7rem color-mix(in srgb, var(--ether-primary) 14%, transparent);
+}
+
+.dashboard-widget-menu-button {
+  color: var(--ether-on-surface-variant);
+}
+
+[data-theme="dark"] .dashboard-widget-menu-button {
+  color: var(--ether-on-surface-variant);
+}
+
+[data-theme="light"] .dashboard-widget-menu-button {
+  border-color: color-mix(in srgb, var(--ether-on-surface) 10%, var(--ether-glass-border));
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.72), transparent 64%),
+    color-mix(in srgb, var(--ether-control-bg) 80%, #fff 20%);
+  color: color-mix(in srgb, var(--ether-on-surface) 70%, transparent);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.72),
+    0 0.3rem 0.85rem rgba(2, 6, 23, 0.1);
+}
+
+.dashboard-widget-menu-button:hover,
+.dashboard-widget-menu-button:focus-visible,
+.dashboard-widget-menu-button.dashboard-widget-control-button-active,
+.dashboard-widget-menu-button[aria-expanded="true"] {
+  border-color: color-mix(in srgb, var(--ether-primary) 34%, var(--ether-glass-border));
+  background:
+    radial-gradient(
+      circle at 30% 18%,
+      color-mix(in srgb, var(--ether-primary) 18%, transparent),
+      transparent 48%
+    ),
+    color-mix(in srgb, var(--ether-primary) 14%, var(--ether-control-bg));
+  color: var(--ether-on-surface);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--ether-on-surface) 14%, transparent),
+    0 0.34rem 0.95rem color-mix(in srgb, var(--ether-primary) 12%, rgba(2, 6, 23, 0.16));
+}
+
+[data-theme="dark"] .dashboard-widget-menu-button:hover,
+[data-theme="dark"] .dashboard-widget-menu-button:focus-visible,
+[data-theme="dark"] .dashboard-widget-menu-button.dashboard-widget-control-button-active,
+[data-theme="dark"] .dashboard-widget-menu-button[aria-expanded="true"] {
+  border-color: color-mix(in srgb, var(--ether-primary) 28%, var(--ether-glass-border));
+  background: var(--ether-control-hover);
+  color: var(--ether-on-surface);
+}
+
+[data-theme="light"] .dashboard-widget-menu-button:hover,
+[data-theme="light"] .dashboard-widget-menu-button:focus-visible,
+[data-theme="light"] .dashboard-widget-menu-button.dashboard-widget-control-button-active,
+[data-theme="light"] .dashboard-widget-menu-button[aria-expanded="true"] {
+  background:
+    radial-gradient(
+      circle at 30% 18%,
+      color-mix(in srgb, var(--ether-primary) 13%, transparent),
+      transparent 48%
+    ),
+    color-mix(in srgb, var(--ether-primary) 10%, var(--ether-control-bg));
+}
+
+.dashboard-widget-control-button-primary {
+  border-color: color-mix(in srgb, var(--dashboard-widget-accent, var(--ether-primary)) 42%, transparent);
+  background: var(--dashboard-widget-accent, var(--ether-primary));
+  color: var(--ether-control-active-text, var(--ether-surface));
+}
+
+.dashboard-widget-control-button-primary:hover,
+.dashboard-widget-control-button-primary:focus-visible {
+  border-color: color-mix(in srgb, var(--dashboard-widget-accent, var(--ether-primary)) 54%, white);
+  background: color-mix(in srgb, var(--dashboard-widget-accent, var(--ether-primary)) 88%, white);
+  color: var(--ether-control-active-text, var(--ether-surface));
+}
+
+.dashboard-widget-control-button-inverse {
+  border-color: rgba(255, 255, 255, 0.12);
+  background: rgba(0, 0, 0, 0.42);
+  color: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 0.28rem 0.85rem rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.dashboard-widget-control-button-inverse:hover,
+.dashboard-widget-control-button-inverse:focus-visible,
+.dashboard-widget-control-button-inverse.dashboard-widget-control-button-active {
+  border-color: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.18);
+  color: white;
+}
+
+.dashboard-widget-control-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.42;
+  transform: none;
+}
+
+.dashboard-widget-icon-badge {
+  background:
+    radial-gradient(circle at 26% 20%, color-mix(in srgb, var(--ether-on-surface) 10%, transparent), transparent 36%),
+    conic-gradient(
+      from 210deg,
+      color-mix(in srgb, var(--dashboard-widget-accent, var(--ether-primary)) 24%, transparent),
+      color-mix(in srgb, var(--ether-amber) 12%, transparent),
+      color-mix(in srgb, var(--ether-teal) 16%, transparent),
+      color-mix(in srgb, var(--dashboard-widget-accent, var(--ether-primary)) 20%, transparent)
+    );
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--ether-on-surface) 12%, transparent),
+    0 0.18rem 0.45rem rgba(2, 6, 23, 0.14);
+}
+
+.dashboard-widget-icon-target {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.dashboard-widget-icon-target .dashboard-widget-icon-badge {
+  transition:
+    transform 220ms cubic-bezier(0.2, 0.86, 0.25, 1),
+    border-color 220ms ease,
+    box-shadow 220ms ease;
+}
+
+.dashboard-widget-icon-target:hover .dashboard-widget-icon-badge,
+.dashboard-widget-icon-target:focus-visible .dashboard-widget-icon-badge {
+  border-color: color-mix(in srgb, var(--dashboard-widget-accent, var(--ether-primary)) 34%, var(--ether-glass-border));
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, white 22%, transparent),
+    0 0.3rem 0.8rem rgba(2, 6, 23, 0.18),
+    0 0 0 0.22rem color-mix(in srgb, var(--dashboard-widget-accent, var(--ether-primary)) 14%, transparent);
+  transform: translateY(-1px) scale(1.035);
+}
+
+.dashboard-widget-icon-target:active .dashboard-widget-icon-badge {
+  transform: translateY(0) scale(0.96);
+}
+
+.dashboard-widget-icon-original {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+  transition:
+    opacity 150ms ease,
+    transform 220ms cubic-bezier(0.2, 0.86, 0.25, 1);
+}
+
+.dashboard-widget-icon-expand-button {
+  position: absolute;
+  inset: 0;
+  z-index: 12;
+  display: grid;
+  width: 100%;
+  height: 100%;
+  place-items: center;
+  color: var(--dashboard-widget-accent, var(--ether-primary));
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.7) rotate(-10deg);
+  transform-origin: center;
+  transition:
+    opacity 170ms ease,
+    transform 240ms cubic-bezier(0.2, 1.18, 0.24, 1);
+}
+
+.dashboard-widget-icon-target:hover .dashboard-widget-icon-original,
+.dashboard-widget-icon-target:focus-visible .dashboard-widget-icon-original {
+  opacity: 0;
+  transform: scale(0.72) rotate(9deg);
+}
+
+.dashboard-widget-icon-target:hover .dashboard-widget-icon-expand-button,
+.dashboard-widget-icon-target:focus-visible .dashboard-widget-icon-expand-button {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+
+.dashboard-widget-icon-burst {
+  position: absolute;
+  inset: 0.18rem;
+  border-radius: inherit;
+  background:
+    radial-gradient(circle at 26% 24%, color-mix(in srgb, white 24%, transparent), transparent 32%),
+    radial-gradient(circle at 78% 75%, color-mix(in srgb, var(--ether-primary) 16%, transparent), transparent 44%);
+  opacity: 0.45;
+}
+
+.dashboard-widget-icon-badge > span > svg {
+  filter: drop-shadow(0 0.1rem 0.18rem rgba(2, 6, 23, 0.16));
+}
+
+.dashboard-focused-widget-backdrop {
+  animation: dashboard-focused-backdrop-in 240ms ease-out both;
+}
+
+.dashboard-focused-widget-shell {
+  transform-origin: center;
+  animation: dashboard-focused-shell-in 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.dashboard-focused-widget-shell::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  background:
+    linear-gradient(115deg, transparent 0%, color-mix(in srgb, white 13%, transparent) 44%, transparent 58%);
+  opacity: 0;
+  transform: translateX(-42%);
+  animation: dashboard-focused-shell-sheen 720ms 90ms cubic-bezier(0.19, 1, 0.22, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dashboard-widget-icon-target .dashboard-widget-icon-badge,
+  .dashboard-widget-icon-original,
+  .dashboard-widget-icon-expand-button {
+    transition: none;
+  }
+
+  .dashboard-focused-widget-backdrop,
+  .dashboard-focused-widget-shell,
+  .dashboard-focused-widget-shell::before {
+    animation: none;
+  }
+}
+
+.sketch-color-swatch-white {
+  box-shadow:
+    inset 0 0 0 1px rgba(15, 23, 42, 0.62),
+    0 0 0 1px rgba(255, 255, 255, 0.72),
+    0 0.28rem 0.72rem rgba(0, 0, 0, 0.22);
+}
+
+:where(.dashboard-widget-body, .dashboard-widget-settings-panel) :where(select) {
+  color-scheme: var(--dashboard-select-color-scheme, dark);
+}
+
+:where(.dashboard-widget-body, .dashboard-widget-settings-panel) :where(option, optgroup) {
+  background-color: var(--dashboard-select-menu-bg);
+  color: var(--ether-on-surface);
+}
+
+:where(.dashboard-widget-body, .dashboard-widget-settings-panel) option:checked {
+  background-color: color-mix(in srgb, var(--ether-primary) 26%, var(--dashboard-select-menu-bg));
+  color: var(--ether-on-surface);
+}
+
+:where(.dashboard-widget-body, .dashboard-widget-settings-panel) option:disabled {
+  color: color-mix(in srgb, var(--ether-on-surface-variant) 72%, transparent);
+}
+
+.dashboard-widget-touch-scroll {
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+}
+
+.dashboard-widget-touch-scroll-y {
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+}
+
+.dashboard-widget-touch-scroll-x {
+  min-width: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x pan-y;
+}
+
+/* ── TableWidget Enhanced Styles ── */
+
+/* Glassmorphism tooltip */
+[data-tip] {
+  position: relative;
+}
+
+[data-tip]::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%) scale(0.92);
+  white-space: nowrap;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ether-on-surface);
+  background: var(--ether-overlay-panel, var(--ether-surface-container-low));
+  border: 1px solid var(--ether-glass-border);
+  border-radius: 0.65rem;
+  padding: 0.3rem 0.65rem;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.18);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s, transform 0.15s;
+  z-index: 50;
+}
+
+[data-tip]:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+}
+
+/* Don't show tooltip on touch */
+@media (hover: none) {
+  [data-tip]::after {
+    display: none;
+  }
+}
+
+/* Formula cell indicator */
+.table-widget-formula-cell {
+  position: relative;
+}
+
+.table-widget-formula-cell::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-top: 5px solid var(--ether-primary);
+  opacity: 0.55;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.table-widget-formula-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.75rem;
+  font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--ether-on-surface);
+  border-bottom: 1px solid var(--ether-glass-border);
+  background: color-mix(in srgb, var(--ether-surface-container-low) 50%, transparent);
+}
+
+.table-widget-formula-bar .formula-label {
+  font-size: 0.5625rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--ether-primary);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Active cell indicator */
+.table-widget-active-cell {
+  position: relative;
+  z-index: 10;
+}
+
+.table-widget-active-cell::after {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  right: -1px;
+  bottom: -1px;
+  border: 2px solid var(--ether-primary);
+  pointer-events: none;
+  z-index: 11;
+}
+
+.table-widget-fill-handle {
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  width: 7px;
+  height: 7px;
+  background-color: var(--ether-primary);
+  border: 1px solid var(--ether-surface-container-low);
+  z-index: 12;
+  cursor: crosshair;
+}
+
+/* Formula autocomplete dropdown */
+.table-widget-autocomplete {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  z-index: 60;
+  max-height: 220px;
+  overflow-y: auto;
+  border: 1px solid var(--ether-glass-border);
+  border-top: none;
+  border-radius: 0 0 1rem 1rem;
+  background: var(--ether-overlay-panel, var(--ether-surface-container-low));
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+  padding: 0.35rem 0;
+}
+
+.table-widget-autocomplete-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.75rem;
+  cursor: pointer;
+  transition: background 0.1s;
+  font-size: 0.75rem;
+  color: var(--ether-on-surface);
+}
+
+.table-widget-autocomplete-item:hover,
+.table-widget-autocomplete-item.active {
+  background: color-mix(in srgb, var(--ether-primary) 12%, transparent);
+}
+
+.table-widget-autocomplete-item .ac-name {
+  font-weight: 800;
+  font-size: 0.6875rem;
+  font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+  letter-spacing: 0.04em;
+  color: var(--ether-primary);
+  min-width: 6rem;
+}
+
+.table-widget-autocomplete-item .ac-sig {
+  font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+  font-size: 0.625rem;
+  font-weight: 600;
+  opacity: 0.6;
+  flex-shrink: 0;
+}
+
+.table-widget-autocomplete-item .ac-desc {
+  font-size: 0.625rem;
+  font-weight: 500;
+  opacity: 0.55;
+  margin-left: auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.table-widget-autocomplete-item .ac-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.5rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 0.1rem 0.35rem;
+  border-radius: 0.35rem;
+  background: color-mix(in srgb, var(--ether-primary) 15%, transparent);
+  color: var(--ether-primary);
+  flex-shrink: 0;
+}
+
+/* Column letter header row */
+.table-widget-col-letter {
+  position: sticky;
+  top: 0;
+  z-index: 4;
+  text-align: center;
+  font-size: 0.5625rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ether-on-surface-variant);
+  background: color-mix(in srgb, var(--ether-surface-container-low) 85%, transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 0.2rem 0;
+  border-bottom: 1px solid var(--ether-glass-border);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Reference mode highlight for clicked cell */
+.table-widget-ref-highlight {
+  box-shadow: inset 0 0 0 2px var(--ether-primary), 0 0 8px color-mix(in srgb, var(--ether-primary) 30%, transparent);
+  animation: table-ref-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes table-ref-pulse {
+  0%, 100% { box-shadow: inset 0 0 0 2px var(--ether-primary), 0 0 8px color-mix(in srgb, var(--ether-primary) 20%, transparent); }
+  50% { box-shadow: inset 0 0 0 2px var(--ether-primary), 0 0 14px color-mix(in srgb, var(--ether-primary) 40%, transparent); }
+}
+
+.table-widget-selection-cell {
+  position: relative;
+}
+
+.table-widget-selection-cell::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: color-mix(in srgb, var(--ether-primary) 15%, transparent);
+  border: 1.5px solid color-mix(in srgb, var(--ether-primary) 40%, transparent);
+  z-index: 2;
+}
+
+.table-widget-frozen-header th,
+.table-widget-frozen-header td {
+  position: sticky;
+  top: 0;
+  z-index: 4;
+  background: var(--ether-surface-container-low, #f5f5f5);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+[data-theme="dark"] .table-widget-frozen-header th,
+[data-theme="dark"] .table-widget-frozen-header td {
+  background: color-mix(in srgb, var(--ether-surface-container-low, #1a1a2e) 92%, transparent);
+}
+
+.table-widget-row-number {
+  width: 2.5rem;
+  min-width: 2.5rem;
+  max-width: 2.5rem;
+  text-align: center;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--ether-on-surface-variant);
+  background: color-mix(in srgb, var(--ether-surface-container-low) 60%, transparent);
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: pointer;
+  border-right: 1px solid var(--ether-glass-border);
+}
+
+.table-widget-row-number:hover {
+  background: color-mix(in srgb, var(--ether-primary) 10%, transparent);
+}
+
+.table-widget-search-match {
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--ether-primary) 55%, transparent);
+  border-radius: 2px;
+}
+
+.table-widget-search-match-active {
+  box-shadow: inset 0 0 0 2.5px var(--ether-primary);
+  background: color-mix(in srgb, var(--ether-primary) 12%, transparent);
+  border-radius: 2px;
+}
+
+.table-widget-status-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.625rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--ether-on-surface-variant);
+  border-top: 1px solid var(--ether-glass-border);
+  background: color-mix(in srgb, var(--ether-surface-container-low) 40%, transparent);
+}
+
+.table-widget-sort-indicator {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.5rem;
+  opacity: 0.5;
+  vertical-align: middle;
+  line-height: 1;
+}
+
+.table-widget-sort-button {
+  position: absolute;
+  right: 2.35rem;
+  top: 50%;
+  z-index: 6;
+  display: inline-flex;
+  height: 1.45rem;
+  width: 1.45rem;
+  transform: translateY(-50%);
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--ether-glass-border);
+  border-radius: 999px;
+  color: var(--ether-on-surface-variant);
+  background: color-mix(in srgb, var(--ether-control-bg) 76%, transparent);
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.table-widget-sort-button:hover,
+.table-widget-sort-button.active {
+  color: var(--ether-on-surface);
+  border-color: color-mix(in srgb, var(--ether-primary) 45%, var(--ether-glass-border));
+  background: color-mix(in srgb, var(--ether-primary) 14%, transparent);
+}
+
+.table-widget-col-header {
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: background 0.15s;
+}
+
+.table-widget-col-header:hover {
+  background: color-mix(in srgb, var(--ether-primary) 8%, transparent);
+}
+
+/* Stripe pattern for alternating rows */
+.table-widget-stripe-row {
+  background: color-mix(in srgb, var(--ether-surface-container-low) 30%, transparent);
+}
+
+.table-widget-dragging {
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.table-widget-resize-handle {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 1rem;
+  min-width: 44px;
+  cursor: col-resize;
+  touch-action: none;
+  background: transparent;
+  transition: background 0.15s;
+  z-index: 5;
+}
+
+.table-widget-resize-handle::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 20%;
+  bottom: 20%;
+  width: 2px;
+  border-radius: 1px;
+  background: transparent;
+  transition: background 0.15s;
+}
+
+.table-widget-resize-handle:hover::after,
+.table-widget-resize-handle:active::after {
+  background: var(--ether-primary);
+}
+
+.table-widget-resize-handle:hover,
+.table-widget-resize-handle:active {
+  background: color-mix(in srgb, var(--ether-primary) 12%, transparent);
+}
+
+/* Overflow menu */
+.table-widget-overflow-menu {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  margin-top: 0.25rem;
+  z-index: 20;
+  min-width: 10rem;
+  border-radius: 1.15rem;
+  border: 1px solid var(--ether-glass-border);
+  background: var(--ether-overlay-panel, var(--ether-surface-container-low));
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.22);
+  padding: 0.35rem;
+}
+
+.table-widget-overflow-menu button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ether-on-surface);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s;
+  min-height: 2.5rem;
+}
+
+.table-widget-overflow-menu button:hover {
+  background: color-mix(in srgb, var(--ether-primary) 10%, transparent);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .dashboard-widget-search-highlight {
+    animation: dashboard-widget-search-focus 2.6s cubic-bezier(0.19, 1, 0.22, 1) both;
+  }
+}
+
+@keyframes dashboard-widget-search-focus {
+  0% {
+    transform: scale(1);
+    box-shadow:
+      0 0 0 0 color-mix(in srgb, var(--ether-primary) 0%, transparent),
+      0 0 0 color-mix(in srgb, var(--dashboard-accent-soft) 0%, transparent),
+      0 8px 20px rgba(2, 6, 23, 0.08);
+  }
+
+  18% {
+    transform: scale(1.018);
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--ether-primary) 46%, transparent),
+      0 22px 70px color-mix(in srgb, var(--dashboard-accent-soft) 82%, transparent),
+      0 14px 40px rgba(2, 6, 23, 0.2);
+  }
+
+  100% {
+    transform: scale(1.012);
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--ether-primary) 36%, transparent),
+      0 18px 56px color-mix(in srgb, var(--dashboard-accent-soft) 72%, transparent),
+      0 12px 34px rgba(2, 6, 23, 0.18);
+  }
+}
+
+@keyframes dashboard-focused-backdrop-in {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0);
+    -webkit-backdrop-filter: blur(0);
+  }
+
+  to {
+    opacity: 1;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+}
+
+@keyframes dashboard-focused-shell-in {
+  0% {
+    opacity: 0;
+    transform: translateY(0.8rem) scale(0.94);
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  }
+
+  62% {
+    opacity: 1;
+    transform: translateY(-0.14rem) scale(1.006);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes dashboard-focused-shell-sheen {
+  0% {
+    opacity: 0;
+    transform: translateX(-54%);
+  }
+
+  28% {
+    opacity: 0.8;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(54%);
+  }
+}
+
+.dashboard-floating-robot-aura {
+  background:
+    radial-gradient(circle at 46% 46%, color-mix(in srgb, var(--dashboard-accent) 16%, transparent), transparent 44%),
+    conic-gradient(from 18deg, transparent, color-mix(in srgb, var(--ether-primary) 16%, transparent), transparent 36%, color-mix(in srgb, var(--dashboard-glow-b) 18%, transparent), transparent 72%);
+  filter: blur(4px) saturate(1.08);
+  opacity: 0.26;
+  animation: dashboard-floating-robot-aura 3.8s ease-in-out infinite alternate;
+}
+
+.dashboard-floating-robot-scan {
+  border: 1px solid color-mix(in srgb, var(--ether-primary) 20%, transparent);
+  box-shadow:
+    inset 0 0 18px color-mix(in srgb, var(--dashboard-accent) 10%, transparent),
+    0 0 18px color-mix(in srgb, var(--dashboard-glow-a) 14%, transparent);
+  opacity: 0.24;
+  animation: dashboard-floating-robot-scan 2.4s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+}
+
+[data-robot-autopilot-style="perch"] .dashboard-floating-robot-aura {
+  opacity: 0.18;
+  transform: scale(0.82);
+}
+
+[data-robot-autopilot-style="perch"] .dashboard-floating-robot-scan,
+[data-robot-autopilot-style="return"] .dashboard-floating-robot-scan {
+  opacity: 0;
+}
+
+[data-robot-autopilot-phase="home"] .dashboard-floating-robot-aura {
+  opacity: 0.12;
+  filter: blur(14px);
+}
+
+[data-robot-autopilot-style="peek"] .dashboard-floating-robot-aura {
+  opacity: 0.22;
+}
+
+[data-robot-autopilot-style="dash"] .dashboard-floating-robot-aura {
+  opacity: 0.22;
+  filter: blur(8px) saturate(1.2);
+}
+
+[data-robot-autopilot-style="scan"] .dashboard-floating-robot-aura {
+  opacity: 0.28;
+  filter: blur(5px) saturate(1.3);
+}
+
+[data-robot-autopilot-style="float"] .dashboard-floating-robot-aura {
+  opacity: 0.18;
+}
+
+[data-robot-autopilot-style="hide"] .dashboard-floating-robot-aura {
+  opacity: 0.05;
+  filter: blur(20px);
+}
+
+[data-robot-autopilot-style="rotate"] .dashboard-floating-robot-aura,
+[data-robot-autopilot-style="tumble"] .dashboard-robot-glow,
+[data-robot-autopilot-style="tumble"] .dashboard-floating-robot-aura {
+  opacity: 0.3;
+  filter: blur(8px) saturate(1.4);
+}
+
+[data-robot-autopilot-style="pulse"] .dashboard-floating-robot-aura {
+  animation: dashboard-floating-robot-pulse-aura 2.2s ease-in-out infinite;
+}
+
+[data-robot-autopilot-style="glitch"] .dashboard-floating-robot-aura {
+  animation: dashboard-floating-robot-glitch-aura 0.15s steps(2) infinite;
+}
+
+@keyframes dashboard-floating-robot-pulse-aura {
+  0%, 100% { transform: scale(1); opacity: 0.2; filter: blur(12px); }
+  50% { transform: scale(1.4); opacity: 0.45; filter: blur(18px) saturate(1.5); }
+}
+
+@keyframes dashboard-floating-robot-glitch-aura {
+  0% { transform: translate(2px, -1px) scale(1.05); filter: hue-rotate(0deg) brightness(1.2); }
+  50% { transform: translate(-2px, 1px) scale(0.95); filter: hue-rotate(180deg) brightness(1.5); }
+  100% { transform: translate(1px, 2px) scale(1.1); filter: hue-rotate(90deg) brightness(1.1); }
+}
+
+.dashboard-floating-robot-laser-scan {
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    color-mix(in srgb, var(--dashboard-glow-b) 20%, transparent) 40%,
+    color-mix(in srgb, var(--ether-primary) 80%, transparent) 50%,
+    color-mix(in srgb, var(--dashboard-glow-b) 20%, transparent) 60%,
+    transparent 100%
+  );
+  opacity: 0.4;
+  animation: dashboard-floating-robot-laser-scan-anim 2.5s ease-in-out infinite alternate;
+  mix-blend-mode: screen;
+}
+
+.dashboard-floating-robot-idle {
+  animation: dashboard-floating-robot-idle-bob 4s ease-in-out infinite alternate;
+}
+
+@keyframes dashboard-floating-robot-idle-bob {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-8px); }
+}
+
+@keyframes dashboard-floating-robot-laser-scan-anim {
+  0% { transform: translateY(-50%) scaleY(0.1); opacity: 0; }
+  10% { opacity: 0.35; }
+  50% { transform: translateY(0) scaleY(1); opacity: 0.55; }
+  90% { opacity: 0.35; }
+  100% { transform: translateY(50%) scaleY(0.1); opacity: 0; }
+}
+
+@keyframes dashboard-floating-robot-aura {
+  from {
+    transform: rotate(-5deg) scale(0.96);
+  }
+
+  to {
+    transform: rotate(7deg) scale(1.025);
+  }
+}
+
+@keyframes dashboard-floating-robot-scan {
+  0% {
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+
+  72% {
+    opacity: 0.08;
+    transform: translate(-50%, -50%) scale(1.12);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.18);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dashboard-floating-robot-aura,
+  .dashboard-floating-robot-scan {
+    animation: none;
+  }
+}
+
+/* Theme-aware card utilities — handled by useCardTheme hook in components */
+
+/* Light mode: SVG strokes — handled by useCardTheme in components */
+
+/* Light mode inner backgrounds — handled by useCardTheme ${t.panel} */
+
+/* Light mode inner borders — handled by useCardTheme ${t.panelBorder} */

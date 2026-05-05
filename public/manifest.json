@@ -1,0 +1,33 @@
+{
+    "name": "Curio Robot",
+    "short_name": "Curio",
+    "description": "The interactive AI robot companion for learning and exploration.",
+    "start_url": "/",
+    "display": "fullscreen",
+    "display_override": [
+        "fullscreen",
+        "standalone"
+    ],
+    "scope": "/",
+    "background_color": "#020617",
+    "theme_color": "#020617",
+    "orientation": "any",
+    "lang": "en-US",
+    "categories": [
+        "education",
+        "kids",
+        "entertainment"
+    ],
+    "permissions": [
+        "microphone",
+        "speaker-selection"
+    ],
+    "icons": [
+        {
+            "src": "/curio_icon.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ]
+}

@@ -1,0 +1,16 @@
+/* Fix for Lucide icons not rendering on Raspberry Pi / older Chromium */
+svg.lucide,
+svg[class*="lucide"] {
+  flex-shrink: 0;
+  min-width: 16px;
+  min-height: 16px;
+  width: 1em;
+  height: 1em;
+  overflow: visible;
+  display: inline-block;
+  vertical-align: middle;
+  will-change: auto;
+  backface-visibility: hidden;
+  stroke: currentColor;
+  fill: none;
+}

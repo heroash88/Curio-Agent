@@ -1,0 +1,141 @@
+/* ═══ KiroFace Specific Accessory Animations ═══ */
+
+@keyframes kiro-zzz-float {
+
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 0.6;
+  }
+
+  50% {
+    transform: translateY(-14px) scale(1.08);
+    opacity: 1;
+  }
+}
+
+@keyframes kiro-note-float {
+
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0.7;
+  }
+
+  25% {
+    transform: translateY(-10px) rotate(-5deg);
+    opacity: 1;
+  }
+
+  75% {
+    transform: translateY(-6px) rotate(5deg);
+    opacity: 1;
+  }
+}
+
+@keyframes kiro-halo-bob {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes kiro-confetti-fall {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(300px) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+@keyframes kiro-flame-flicker {
+
+  0%,
+  100% {
+    transform: scaleY(1);
+    opacity: 0.6;
+  }
+
+  50% {
+    transform: scaleY(1.25);
+    opacity: 0.9;
+  }
+}
+
+@keyframes kiro-shake {
+
+  10%,
+  90% {
+    transform: translate3d(-2px, 0, 0);
+  }
+
+  20%,
+  80% {
+    transform: translate3d(3px, 0, 0);
+  }
+
+  30%,
+  50%,
+  70% {
+    transform: translate3d(-6px, 0, 0);
+  }
+
+  40%,
+  60% {
+    transform: translate3d(6px, 0, 0);
+  }
+}
+
+/* Kiro-unique ghost flourishes */
+@keyframes kiro-spectral-pulse {
+
+  0%,
+  100% {
+    transform: scale(0.95);
+    opacity: 0.55;
+  }
+
+  50% {
+    transform: scale(1.08);
+    opacity: 0.9;
+  }
+}
+
+@keyframes kiro-sparkle-twinkle {
+
+  0%,
+  100% {
+    transform: scale(0.6) rotate(0deg);
+    opacity: 0.3;
+  }
+
+  50% {
+    transform: scale(1.1) rotate(90deg);
+    opacity: 1;
+  }
+}
+
+@keyframes kiro-beam-motes {
+  0% {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+
+  30% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(160px);
+    opacity: 0;
+  }
+}

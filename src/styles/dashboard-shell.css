@@ -1,0 +1,589 @@
+.dashboard-pwa-root {
+  box-sizing: border-box;
+  height: 100%;
+  min-height: 0;
+  padding-top: var(--pwa-safe-top);
+  padding-right: var(--pwa-safe-right);
+  padding-bottom: var(--pwa-safe-bottom);
+  padding-left: var(--pwa-safe-left);
+  isolation: isolate;
+}
+
+.dashboard-pwa-content {
+  min-height: 0;
+}
+
+.dashboard-pwa-scroll {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+  touch-action: pan-y pinch-zoom;
+  padding-bottom: calc(6rem + var(--pwa-safe-bottom));
+  scroll-padding-top: calc(5.25rem + var(--pwa-safe-top));
+  scroll-padding-bottom: calc(6rem + var(--pwa-safe-bottom));
+}
+
+.dashboard-floating-panel,
+.dashboard-side-panel,
+.dashboard-widget-settings-panel,
+.curio-settings-panel {
+  -webkit-overflow-scrolling: touch;
+}
+
+.dashboard-floating-panel {
+  max-height: calc(100dvh - 6rem - var(--pwa-safe-top) - var(--pwa-safe-bottom));
+}
+
+.dashboard-side-panel {
+  padding-top: calc(1rem + var(--pwa-safe-top));
+  padding-right: calc(1rem + var(--pwa-safe-right));
+  padding-bottom: calc(1rem + var(--pwa-safe-bottom));
+  padding-left: 1rem;
+}
+
+.dashboard-widget-picker-panel {
+  contain: layout style paint;
+  touch-action: pan-y;
+  padding-top: calc(1rem + var(--pwa-safe-top));
+  padding-right: calc(1rem + var(--pwa-safe-right));
+  padding-bottom: calc(1rem + var(--pwa-safe-bottom));
+}
+
+.dashboard-picker-scrim {
+  touch-action: none;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .dashboard-picker-scrim {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgb(0 0 0 / 0.28);
+  }
+
+  .dashboard-widget-picker-panel {
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+}
+
+.dashboard-widget-settings-panel {
+  max-height: calc(100dvh - 2rem - var(--pwa-safe-top) - var(--pwa-safe-bottom));
+}
+
+.curio-settings-modal {
+  padding-top: max(1rem, var(--pwa-safe-top));
+  padding-right: max(1rem, var(--pwa-safe-right));
+  padding-bottom: max(1rem, var(--pwa-safe-bottom));
+  padding-left: max(1rem, var(--pwa-safe-left));
+}
+
+.curio-settings-panel {
+  max-height: calc(100dvh - 2rem - var(--pwa-safe-top) - var(--pwa-safe-bottom));
+}
+
+@media (min-width: 768px) and (max-width: 1180px) {
+  .dashboard-pwa-scroll {
+    padding-inline: clamp(1.5rem, 3vw, 2.25rem);
+  }
+}
+
+@layer utilities {
+  .transition-snappy {
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, filter, backdrop-filter;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 200ms;
+  }
+
+  .text-rainbow {
+    background: linear-gradient(to right, #6366f1, #ec4899, #f59e0b, #6366f1);
+    background-size: 200% auto;
+    color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+    animation: shine 4s linear infinite;
+  }
+
+  .scrollbar-stable {
+    scrollbar-gutter: stable;
+  }
+
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+
+  .blob-shape {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  @keyframes sparkle {
+
+    0%,
+    100% {
+      opacity: 1;
+      filter: brightness(100%);
+      transform: scale(1);
+    }
+
+    50% {
+      opacity: 0.8;
+      filter: brightness(150%) saturate(150%);
+      transform: scale(1.02);
+    }
+  }
+
+  .animate-text-sparkle {
+    animation: sparkle 3s ease-in-out infinite;
+  }
+
+  @keyframes slow-pan {
+    0% {
+      background-position: 0% 50%;
+      transform: scale(1);
+    }
+
+    50% {
+      background-position: 100% 50%;
+      transform: scale(1.05);
+    }
+
+    100% {
+      background-position: 0% 50%;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes ai-ripple {
+    0% {
+      transform: scale(0);
+      opacity: 1;
+    }
+
+    100% {
+      transform: scale(3);
+      opacity: 0;
+    }
+  }
+
+  .animate-ai-ripple {
+    animation: ai-ripple 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+
+  .animate-bg-pan {
+    animation: slow-pan 30s ease-in-out infinite alternate;
+  }
+
+  @keyframes pan-zoom {
+    0% {
+      background-position: 50% 50%;
+    }
+
+    50% {
+      background-position: 50% 60%;
+    }
+
+    100% {
+      background-position: 50% 50%;
+    }
+  }
+
+  .animate-pan-zoom {
+    animation: pan-zoom 20s ease-in-out infinite alternate;
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+
+    100% {
+      background-position: 200% 0;
+    }
+  }
+
+  .animate-shimmer {
+    background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%);
+    background-size: 200% 100%;
+    animation: shimmer 3s ease-in-out infinite;
+  }
+
+  @keyframes pulse-glow-violet {
+
+    0%,
+    100% {
+      box-shadow: 0 0 20px rgba(139, 92, 246, 0.3), 0 0 0 2px rgba(139, 92, 246, 0.2);
+    }
+
+    50% {
+      box-shadow: 0 0 40px rgba(139, 92, 246, 0.6), 0 0 0 4px rgba(139, 92, 246, 0.4);
+    }
+  }
+
+  .animate-pulse-glow-violet {
+    animation: pulse-glow-violet 3s ease-in-out infinite;
+  }
+
+  @keyframes pulse-glow-emerald {
+
+    0%,
+    100% {
+      box-shadow: 0 0 20px rgba(16, 185, 129, 0.3), 0 0 0 2px rgba(16, 185, 129, 0.2);
+    }
+
+    50% {
+      box-shadow: 0 0 40px rgba(16, 185, 129, 0.6), 0 0 0 4px rgba(16, 185, 129, 0.4);
+    }
+  }
+
+  .animate-pulse-glow-emerald {
+    animation: pulse-glow-emerald 3s ease-in-out infinite;
+  }
+
+  @keyframes pulse-glow-indigo {
+
+    0%,
+    100% {
+      box-shadow: 0 0 20px rgba(99, 102, 241, 0.3), 0 0 0 2px rgba(99, 102, 241, 0.2);
+    }
+
+    50% {
+      box-shadow: 0 0 40px rgba(99, 102, 241, 0.6), 0 0 0 4px rgba(99, 102, 241, 0.4);
+    }
+  }
+
+  .animate-pulse-glow-indigo {
+    animation: pulse-glow-indigo 4s ease-in-out infinite;
+  }
+
+  @keyframes float-small {
+
+    0%,
+    100% {
+      transform: translateY(0px) rotate(0deg);
+    }
+
+    50% {
+      transform: translateY(-5px) rotate(1deg);
+    }
+  }
+
+  .animate-float-small {
+    animation: float-small 4s ease-in-out infinite;
+  }
+
+  .animate-periodic-show {
+    animation: periodic-show 5s ease-in-out infinite;
+  }
+
+  .animate-periodic-show:hover {
+    animation: none;
+    opacity: 1 !important;
+    transform: scale(1) !important;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  @keyframes slide-in {
+    from {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  .animate-slide-in {
+    animation: slide-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      transform: translateY(8px);
+      opacity: 0;
+    }
+
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes fadeSlideIn {
+    from {
+      transform: translateY(15px) scale(0.9);
+      opacity: 0;
+    }
+
+    to {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+  }
+
+  @keyframes slide-in-left {
+    from {
+      transform: translateX(-100%);
+      opacity: 0;
+    }
+
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  .animate-slide-in-left {
+    animation: slide-in-left 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  @keyframes bounce-slow {
+
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  .animate-bounce-slow {
+    animation: bounce-slow 3s ease-in-out infinite;
+  }
+
+  @keyframes float-random {
+
+    0%,
+    100% {
+      transform: translate(0, 0);
+    }
+
+    25% {
+      transform: translate(10px, -10px);
+    }
+
+    50% {
+      transform: translate(-5px, 20px);
+    }
+
+    75% {
+      transform: translate(-10px, -5px);
+    }
+  }
+
+  @keyframes twinkle {
+
+    0%,
+    100% {
+      opacity: 0.2;
+      transform: scale(0.8);
+    }
+
+    50% {
+      opacity: 1;
+      transform: scale(1.2);
+    }
+  }
+
+  @keyframes rise {
+    0% {
+      transform: translateY(0) scale(0.8);
+      opacity: 0;
+    }
+
+    20% {
+      opacity: 0.5;
+    }
+
+    100% {
+      transform: translateY(-100px) scale(1.2);
+      opacity: 0;
+    }
+  }
+
+  @keyframes fall {
+    0% {
+      transform: translateY(-20px) rotate(0deg);
+      opacity: 0;
+    }
+
+    20% {
+      opacity: 0.8;
+    }
+
+    100% {
+      transform: translateY(100vh) rotate(360deg);
+      opacity: 0;
+    }
+  }
+
+  .animate-float-random {
+    animation: float-random 10s ease-in-out infinite;
+  }
+
+  .animate-twinkle {
+    animation: twinkle 3s ease-in-out infinite;
+  }
+
+  .animate-rise {
+    animation: rise 8s linear infinite;
+  }
+
+  .animate-fall {
+    animation: fall 10s linear infinite;
+  }
+
+  @keyframes screensaver-image-fade {
+    from {
+      opacity: 0;
+      transform: scale(1.015);
+    }
+
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+}
+
+/* Custom Scrollbar - More compact for sidebars */
+
+
+/* Ambient pulse ring on fresh data (Requirement 2.2 - 2.8). The ring is
+   rendered as an absolutely-positioned child of the shell so no resting
+   styles are altered on the shell itself; `animation-fill-mode: none`
+   makes the element return to its pre-animation state once the
+   keyframe completes (Requirement 2.8). */
+@keyframes widget-shell-pulse {
+  0% {
+    opacity: 0;
+    transform: scale(0.98);
+    box-shadow: 0 0 0 0
+      color-mix(in srgb, var(--dashboard-widget-accent, var(--ether-primary)) 48%, transparent);
+  }
+
+  10% {
+    opacity: 0.5;
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1.02);
+    box-shadow: 0 0 0 8px transparent;
+  }
+}
+
+.widget-shell-pulse {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  border: 1px solid
+    color-mix(in srgb, var(--dashboard-widget-accent, var(--ether-primary)) 42%, transparent);
+  opacity: 0;
+  animation: widget-shell-pulse 760ms cubic-bezier(0.16, 1, 0.3, 1) 1;
+  animation-fill-mode: none;
+  will-change: transform, opacity;
+}
+
+.widget-shell-pulse--subtle {
+  animation-duration: 600ms;
+  animation-timing-function: linear;
+}
+
+/* Stale-while-revalidate sheen (Requirement 22.1 - 22.5). */
+@keyframes widget-shell-sheen {
+  0% {
+    transform: translateX(-120%);
+    opacity: 0.55;
+  }
+
+  100% {
+    transform: translateX(120%);
+    opacity: 0;
+  }
+}
+
+.widget-shell-sheen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  pointer-events: none;
+  border-top-left-radius: inherit;
+  border-top-right-radius: inherit;
+  overflow: hidden;
+}
+
+.widget-shell-sheen::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in srgb, var(--dashboard-widget-accent, var(--ether-primary)) 80%, transparent) 50%,
+    transparent 100%
+  );
+  animation: widget-shell-sheen 900ms ease-in-out 1;
+}
+
+/* Freshness dot pulse for the `fresh` state (Requirement 20.5). */
+@keyframes freshness-dot-pulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+
+  50% {
+    transform: scale(1.35);
+    opacity: 0.6;
+  }
+}
+
+.dashboard-widget-freshness-dot--pulse {
+  animation: freshness-dot-pulse 1.8s ease-in-out infinite;
+}
+
+/* Pomodoro breathing ring — subtle scale/opacity pulse on the timer ring */
+@keyframes pomodoro-breathing {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.025);
+    opacity: 0.88;
+  }
+}
+
+.pomodoro-breathing-ring {
+  animation: pomodoro-breathing 4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pomodoro-breathing-ring {
+    animation: none;
+  }
+}

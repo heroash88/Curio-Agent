@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fff8ea"/>
+      <stop offset="0.42" stop-color="#e8f5f1"/>
+      <stop offset="1" stop-color="#c4d7ee"/>
+    </linearGradient>
+    <filter id="paper">
+      <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="5" seed="31"/>
+      <feDisplacementMap in="SourceGraphic" scale="8"/>
+    </filter>
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="33"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer>
+        <feFuncA type="table" tableValues="0 0.075"/>
+      </feComponentTransfer>
+    </filter>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#bg)"/>
+  <g filter="url(#paper)" opacity="0.72">
+    <path d="M-100 180 C250 260 500 212 760 126 C1030 36 1250 96 1700 240" fill="none" stroke="#ffffff" stroke-width="90" stroke-linecap="round" opacity="0.48"/>
+    <path d="M-100 510 C290 430 560 500 880 610 C1130 695 1330 650 1700 520" fill="none" stroke="#77c6d3" stroke-width="42" stroke-linecap="round" opacity="0.18"/>
+    <path d="M-100 820 C320 705 615 780 930 872 C1190 950 1390 910 1700 760" fill="none" stroke="#f5c17f" stroke-width="68" stroke-linecap="round" opacity="0.24"/>
+  </g>
+  <path d="M180 70 L1480 930" stroke="#2a5265" stroke-opacity="0.08" stroke-width="3"/>
+  <path d="M-40 660 L1640 170" stroke="#8b5cf6" stroke-opacity="0.08" stroke-width="3"/>
+  <rect width="1600" height="1000" filter="url(#grain)" opacity="0.8"/>
+</svg>

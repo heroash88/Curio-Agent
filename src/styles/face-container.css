@@ -1,0 +1,27 @@
+/* ======================================== */
+/* Mobile-responsive face container         */
+/* ======================================== */
+
+.face-container {
+  width: 90%;
+  height: 90%;
+  margin-top: 4vh;
+}
+
+/* Portrait phones: constrain face so it doesn't overflow vertically */
+@media (max-width: 640px) and (orientation: portrait) {
+  .face-container {
+    width: 95%;
+    height: 70%;
+    max-height: 55vh;
+  }
+}
+
+/* Landscape phones: constrain face width so it doesn't overflow horizontally */
+@media (max-height: 500px) and (orientation: landscape) {
+  .face-container {
+    width: 60%;
+    height: 85%;
+    max-width: 55vw;
+  }
+}

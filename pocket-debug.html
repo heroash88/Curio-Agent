@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TTS Debug</title>
+    <style>
+      :root {
+        color-scheme: light;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      body {
+        margin: 0;
+        padding: 20px;
+        background: #f7f8fb;
+        color: #10213a;
+      }
+
+      main {
+        max-width: 720px;
+        margin: 0 auto;
+        display: grid;
+        gap: 16px;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: 28px;
+      }
+
+      p {
+        margin: 0;
+        line-height: 1.5;
+      }
+
+      .panel {
+        background: white;
+        border-radius: 18px;
+        padding: 18px;
+        box-shadow: 0 16px 40px rgba(16, 33, 58, 0.08);
+      }
+
+      .actions {
+        display: grid;
+        gap: 12px;
+      }
+
+      button {
+        border: 0;
+        border-radius: 14px;
+        padding: 16px 18px;
+        font-size: 18px;
+        font-weight: 700;
+        color: white;
+        background: linear-gradient(135deg, #0ea5e9, #2563eb);
+      }
+
+      button.secondary {
+        background: linear-gradient(135deg, #10b981, #059669);
+      }
+
+      button:disabled {
+        opacity: 0.6;
+      }
+
+      #status {
+        font-weight: 700;
+      }
+
+      #log {
+        min-height: 240px;
+        white-space: pre-wrap;
+        font: 14px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="panel">
+        <h1>TTS Debug</h1>
+        <p>This page exercises Pocket and Kitten TTS from real user-gesture buttons for Safari/iOS testing.</p>
+      </section>
+
+      <section class="panel actions">
+        <button id="prepareBtn">Prepare Pocket TTS</button>
+        <button id="speakPocketBtn" class="secondary">Speak Pocket</button>
+        <button id="speakKittenBtn" class="secondary">Speak Kitten</button>
+        <p id="status">Idle</p>
+      </section>
+
+      <section class="panel">
+        <div id="log"></div>
+      </section>
+    </main>
+
+    <script type="module">
+      import { TTSService } from "/src/services/pocketTtsService.ts";
+      import { unlockAudioContext } from "/src/services/audioContext.ts";
+
+      const logNode = document.querySelector("#log");
+      const statusNode = document.querySelector("#status");
+      const prepareBtn = document.querySelector("#prepareBtn");
+      const speakPocketBtn = document.querySelector("#speakPocketBtn");
+      const speakKittenBtn = document.querySelector("#speakKittenBtn");
+
+      const pocketService = new TTSService({ engine: "pocket-tts" });
+      const kittenService = new TTSService({ engine: "kitten-tts" });
+      const previewText = "Hi, I am Curio. I am ready to speak in Safari on iPhone.";
+      const params = new URLSearchParams(window.location.search);
+      const kittenModelId = params.get("kittenModel") || "micro";
+
+      const log = (...parts) => {
+        const line = `[${new Date().toISOString()}] ${parts.map((part) => {
+          if (part instanceof Error) return `${part.name}: ${part.message}`;
+          if (typeof part === "string") return part;
+          try {
+            return JSON.stringify(part, null, 2);
+          } catch {
+            return String(part);
+          }
+        }).join(" ")}`;
+        console.log(line);
+        logNode.textContent += `${line}\n`;
+      };
+
+      const setStatus = (message) => {
+        statusNode.textContent = message;
+        log("STATUS", message);
+      };
+
+      window.addEventListener("error", (event) => {
+        log("WINDOW_ERROR", event.message, event.error || "");
+      });
+
+      window.addEventListener("unhandledrejection", (event) => {
+        log("UNHANDLED_REJECTION", event.reason || "");
+      });
+
+      prepareBtn.addEventListener("click", async () => {
+        prepareBtn.disabled = true;
+        setStatus("Preparing Pocket TTS...");
+        try {
+          await pocketService.prepareOfflineModels();
+          setStatus("Pocket TTS prepared successfully.");
+        } catch (error) {
+          setStatus(`Prepare failed: ${error?.message || String(error)}`);
+        } finally {
+          prepareBtn.disabled = false;
+        }
+      });
+
+      speakPocketBtn.addEventListener("click", async () => {
+        speakPocketBtn.disabled = true;
+        setStatus("Unlocking audio...");
+        try {
+          await unlockAudioContext();
+          setStatus("Speaking Pocket preview...");
+          await pocketService.speak(previewText);
+          setStatus("Pocket speak completed.");
+        } catch (error) {
+          setStatus(`Pocket speak failed: ${error?.message || String(error)}`);
+        } finally {
+          speakPocketBtn.disabled = false;
+        }
+      });
+
+      speakKittenBtn.addEventListener("click", async () => {
+        speakKittenBtn.disabled = true;
+        setStatus("Unlocking audio...");
+        try {
+          await unlockAudioContext();
+          setStatus(`Speaking Kitten ${kittenModelId} preview...`);
+          await kittenService.speak(previewText, { kittenModelId });
+          setStatus("Kitten speak completed.");
+        } catch (error) {
+          setStatus(`Kitten speak failed: ${error?.message || String(error)}`);
+        } finally {
+          speakKittenBtn.disabled = false;
+        }
+      });
+
+      log("navigator.userAgent", navigator.userAgent);
+      log("kittenModelId", kittenModelId);
+      log("crossOriginIsolated", globalThis.crossOriginIsolated);
+      log("page ready");
+    </script>
+  </body>
+</html>

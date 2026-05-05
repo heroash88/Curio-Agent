@@ -1,0 +1,52 @@
+/* Widget entry animation */
+@keyframes ether-widget-enter {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.ether-widget-enter {
+  animation: ether-widget-enter 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Glassmorphism utility */
+.ether-glass {
+  background: var(--ether-glass-bg);
+  backdrop-filter: blur(var(--ether-glass-blur));
+  -webkit-backdrop-filter: blur(var(--ether-glass-blur));
+  border: 1.5px solid var(--ether-glass-border);
+  border-radius: var(--ether-card-radius);
+  box-shadow: var(--ether-glass-shadow);
+}
+
+/* Inner well for nested content */
+.ether-well {
+  background: var(--ether-surface-container-low);
+  border-radius: var(--ether-inner-radius);
+}
+
+/* Ghost border utility */
+.ether-ghost-border {
+  border: 1.5px solid var(--ether-glass-border);
+}
+
+/* Focus glow for inputs */
+.ether-input {
+  background: var(--ether-surface-container-low);
+  border: 1.5px solid transparent;
+  border-radius: var(--ether-inner-radius);
+  color: var(--ether-on-surface);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.ether-input:focus {
+  border-color: rgba(57, 184, 253, 0.4);
+  box-shadow: 0 0 0 3px rgba(57, 184, 253, 0.12);
+  outline: none;
+}

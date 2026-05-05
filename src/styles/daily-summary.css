@@ -1,0 +1,162 @@
+.daily-summary-reference-surface {
+  background:
+    radial-gradient(120% 90% at 50% -16%, rgba(255, 255, 255, 0.72), transparent 58%),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--ether-surface-container-highest) 88%, white 12%),
+      color-mix(in srgb, var(--ether-surface-container-low) 92%, transparent)
+    );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.52),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.daily-summary-reference-title {
+  color: var(--ether-on-surface-variant);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.daily-summary-reference-list {
+  border: 1px solid color-mix(in srgb, var(--ether-glass-border) 72%, transparent);
+  border-radius: 1.35rem;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.28), transparent 100%),
+    color-mix(in srgb, var(--ether-surface-container-highest) 72%, transparent);
+  box-shadow:
+    0 16px 36px rgba(45, 37, 24, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.daily-summary-reference-row + .daily-summary-reference-row {
+  border-top: 1px solid color-mix(in srgb, var(--ether-glass-border) 58%, transparent);
+}
+
+.daily-summary-copy-panel {
+  border: 1px solid color-mix(in srgb, var(--ether-glass-border) 64%, transparent);
+  background: color-mix(in srgb, var(--ether-surface-container-highest) 52%, transparent);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.42);
+}
+
+.daily-summary-icon-badge {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.85rem;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.52);
+}
+
+.daily-summary-icon-weather {
+  color: var(--ether-sky);
+  background: color-mix(in srgb, var(--ether-sky) 18%, white 82%);
+}
+
+.daily-summary-icon-calendar {
+  color: var(--ether-primary);
+  background: color-mix(in srgb, var(--ether-primary) 16%, white 84%);
+}
+
+.daily-summary-icon-tasks {
+  color: var(--ether-emerald);
+  background: color-mix(in srgb, var(--ether-emerald) 18%, white 82%);
+}
+
+.daily-summary-icon-alerts {
+  color: var(--ether-rose);
+  background: color-mix(in srgb, var(--ether-rose) 17%, white 83%);
+}
+
+.daily-summary-icon-devices {
+  color: var(--ether-teal);
+  background: color-mix(in srgb, var(--ether-teal) 17%, white 83%);
+}
+
+.daily-summary-icon-routines {
+  color: var(--ether-violet);
+  background: color-mix(in srgb, var(--ether-violet) 17%, white 83%);
+}
+
+.daily-summary-icon-air {
+  color: #65a30d;
+  background: color-mix(in srgb, #84cc16 18%, white 82%);
+}
+
+.daily-summary-icon-muted {
+  color: var(--ether-slate);
+  background: color-mix(in srgb, var(--ether-slate) 15%, white 85%);
+}
+
+[data-theme="dark"] .daily-summary-reference-surface,
+.dark-mode .daily-summary-reference-surface {
+  background:
+    radial-gradient(120% 90% at 50% -16%, rgba(255, 244, 225, 0.08), transparent 58%),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--ether-surface-container-highest) 78%, transparent),
+      color-mix(in srgb, var(--ether-surface-container-low) 86%, transparent)
+    );
+}
+
+[data-theme="dark"] .daily-summary-reference-list,
+.dark-mode .daily-summary-reference-list {
+  background:
+    linear-gradient(180deg, rgba(255, 244, 225, 0.045), transparent 100%),
+    color-mix(in srgb, var(--ether-surface-container) 78%, transparent);
+  box-shadow:
+    0 16px 36px rgba(0, 0, 0, 0.16),
+    inset 0 1px 0 rgba(255, 244, 225, 0.08);
+}
+
+[data-theme="dark"] .daily-summary-copy-panel,
+.dark-mode .daily-summary-copy-panel {
+  background: color-mix(in srgb, var(--ether-surface-container) 74%, transparent);
+  box-shadow: inset 0 1px 0 rgba(255, 244, 225, 0.08);
+}
+
+[data-theme="dark"] .daily-summary-icon-badge,
+.dark-mode .daily-summary-icon-badge {
+  box-shadow: inset 0 1px 0 rgba(255, 244, 225, 0.08);
+}
+
+[data-theme="dark"] .daily-summary-icon-weather,
+.dark-mode .daily-summary-icon-weather {
+  background: color-mix(in srgb, var(--ether-sky) 18%, transparent);
+}
+
+[data-theme="dark"] .daily-summary-icon-calendar,
+.dark-mode .daily-summary-icon-calendar {
+  background: color-mix(in srgb, var(--ether-primary) 17%, transparent);
+}
+
+[data-theme="dark"] .daily-summary-icon-tasks,
+.dark-mode .daily-summary-icon-tasks {
+  background: color-mix(in srgb, var(--ether-emerald) 17%, transparent);
+}
+
+[data-theme="dark"] .daily-summary-icon-alerts,
+.dark-mode .daily-summary-icon-alerts {
+  background: color-mix(in srgb, var(--ether-rose) 16%, transparent);
+}
+
+[data-theme="dark"] .daily-summary-icon-devices,
+.dark-mode .daily-summary-icon-devices {
+  background: color-mix(in srgb, var(--ether-teal) 17%, transparent);
+}
+
+[data-theme="dark"] .daily-summary-icon-routines,
+.dark-mode .daily-summary-icon-routines {
+  background: color-mix(in srgb, var(--ether-violet) 17%, transparent);
+}
+
+[data-theme="dark"] .daily-summary-icon-air,
+.dark-mode .daily-summary-icon-air {
+  background: color-mix(in srgb, #84cc16 16%, transparent);
+}
+
+[data-theme="dark"] .daily-summary-icon-muted,
+.dark-mode .daily-summary-icon-muted {
+  background: color-mix(in srgb, var(--ether-slate) 13%, transparent);
+}

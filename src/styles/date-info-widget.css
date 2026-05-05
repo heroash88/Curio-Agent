@@ -1,0 +1,810 @@
+.dashboard-date-info-widget {
+  --date-info-accent: var(--dashboard-widget-accent, var(--ether-violet));
+  --date-info-accent-soft: color-mix(in srgb, var(--date-info-accent) 14%, transparent);
+  --date-info-accent-wash: color-mix(in srgb, var(--date-info-accent) 8%, transparent);
+  position: relative;
+  isolation: isolate;
+  color: var(--ether-on-surface);
+  background:
+    radial-gradient(72% 68% at 12% 0%, var(--date-info-accent-wash), transparent 58%),
+    radial-gradient(60% 58% at 100% 6%, color-mix(in srgb, var(--ether-teal) 9%, transparent), transparent 62%),
+    linear-gradient(180deg, color-mix(in srgb, var(--ether-surface-container-low) 72%, transparent), transparent 76%);
+}
+
+.dashboard-date-info-widget::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--ether-on-surface) 5%, transparent) 1px, transparent 1px),
+    linear-gradient(0deg, color-mix(in srgb, var(--ether-on-surface) 5%, transparent) 1px, transparent 1px);
+  background-size: 22px 22px;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.48), transparent 42%);
+  -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.48), transparent 42%);
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.dashboard-date-info-tiny::before {
+  opacity: 0.22;
+}
+
+.date-info-hero,
+.date-info-scroll {
+  position: relative;
+  z-index: 1;
+}
+
+.date-info-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.85rem;
+  margin-bottom: 0.6rem;
+  border: 1px solid var(--ether-glass-border);
+  border-radius: 1.15rem;
+  background:
+    linear-gradient(135deg, var(--date-info-accent-soft), transparent 52%),
+    var(--ether-surface-container-low);
+  padding: 0.68rem 0.72rem;
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ether-on-surface) 8%, transparent);
+}
+
+.date-info-kicker {
+  overflow: hidden;
+  color: var(--ether-on-surface-variant);
+  font-size: 0.6rem;
+  font-weight: 850;
+  letter-spacing: 0.16em;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.date-info-date {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: var(--ether-on-surface);
+}
+
+.date-info-date > span {
+  font-size: clamp(2.4rem, 17cqw, 3.45rem);
+  font-weight: 850;
+  line-height: 0.92;
+  letter-spacing: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.date-info-date strong,
+.date-info-date em {
+  display: block;
+  font-style: normal;
+  line-height: 1.05;
+}
+
+.date-info-date strong {
+  font-size: 0.92rem;
+  font-weight: 850;
+}
+
+.date-info-date em {
+  margin-top: 0.08rem;
+  color: var(--ether-on-surface-variant);
+  font-size: 0.68rem;
+  font-weight: 750;
+}
+
+.date-info-progress-orb {
+  display: grid;
+  width: clamp(3rem, 21cqw, 4.1rem);
+  aspect-ratio: 1;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid var(--ether-glass-border);
+  border-radius: 9999px;
+  background:
+    radial-gradient(circle at 50% 50%, var(--ether-surface-container) 0 54%, transparent 55%),
+    conic-gradient(from -90deg, var(--date-info-accent) 0 var(--year-progress, 0%), color-mix(in srgb, var(--ether-on-surface) 12%, transparent) var(--year-progress, 0%) 100%);
+  box-shadow:
+    inset 0 0 1.1rem color-mix(in srgb, var(--ether-on-surface) 7%, transparent),
+    0 0.55rem 1.1rem color-mix(in srgb, var(--date-info-accent) 14%, transparent);
+}
+
+.date-info-progress-orb span {
+  color: var(--ether-on-surface);
+  font-size: 0.72rem;
+  font-weight: 850;
+  font-variant-numeric: tabular-nums;
+}
+
+.date-info-scroll {
+  min-height: 0;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding: 0 0.2rem 0.2rem;
+}
+
+.date-info-metric-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.date-info-mini-month {
+  display: grid;
+  gap: 0.42rem;
+  width: 100%;
+  border: 1px solid var(--ether-glass-border);
+  border-radius: 1.05rem;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--ether-teal) 8%, transparent), transparent 58%),
+    var(--ether-control-bg);
+  padding: 0.62rem 0.65rem 0.68rem;
+  text-align: left;
+  transition: background-color 180ms ease, border-color 180ms ease, transform 180ms ease;
+}
+
+.date-info-mini-month:hover,
+.date-info-mini-month:focus-visible {
+  border-color: color-mix(in srgb, var(--date-info-accent) 46%, var(--ether-glass-border));
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--ether-teal) 10%, transparent), transparent 58%),
+    var(--ether-control-hover);
+  transform: translateY(-1px);
+}
+
+.date-info-mini-month-title {
+  color: var(--date-info-accent);
+  font-size: 0.64rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+}
+
+.date-info-mini-weekdays,
+.date-info-mini-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.14rem;
+}
+
+.date-info-mini-weekdays span {
+  color: var(--ether-on-surface-variant);
+  font-size: 0.55rem;
+  font-weight: 900;
+  line-height: 1;
+  text-align: center;
+}
+
+.date-info-mini-day {
+  display: grid;
+  min-height: 1.05rem;
+  place-items: center;
+  border-radius: 9999px;
+  color: var(--ether-on-surface);
+  font-size: clamp(0.56rem, 6cqw, 0.7rem);
+  font-weight: 850;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.date-info-mini-day-outside {
+  color: transparent;
+}
+
+.date-info-mini-day-important:not(.date-info-mini-day-selected) {
+  background: color-mix(in srgb, var(--ether-amber) 18%, transparent);
+  color: var(--ether-amber);
+}
+
+.date-info-mini-day-selected {
+  background: var(--date-info-accent);
+  color: var(--ether-control-active-text);
+  box-shadow: 0 0 0.75rem color-mix(in srgb, var(--date-info-accent) 46%, transparent);
+}
+
+.date-info-metric-card {
+  min-width: 0;
+  border: 1px solid var(--ether-glass-border);
+  border-radius: 0.85rem;
+  background: var(--ether-surface-container-low);
+  padding: 0.5rem 0.55rem;
+  color: var(--ether-on-surface);
+}
+
+.date-info-metric-card span,
+.date-info-metric-card strong {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.date-info-metric-card span {
+  color: var(--ether-on-surface-variant);
+  font-size: 0.55rem;
+  font-weight: 850;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.date-info-metric-card strong {
+  margin-top: 0.12rem;
+  font-size: 0.92rem;
+  font-weight: 850;
+  font-variant-numeric: tabular-nums;
+}
+
+.date-info-fiscal-strip,
+.date-info-section-title {
+  color: var(--ether-on-surface-variant);
+  font-size: 0.57rem;
+  font-weight: 850;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.date-info-fiscal-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  border: 1px solid var(--ether-glass-border);
+  border-radius: 0.85rem;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--ether-teal) 10%, transparent), var(--date-info-accent-wash)),
+    var(--ether-control-bg);
+  padding: 0.45rem 0.55rem;
+}
+
+.date-info-fiscal-strip strong {
+  color: var(--ether-on-surface);
+  font-size: 0.64rem;
+  font-weight: 850;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.date-info-year-calendar {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.42rem;
+}
+
+.date-info-month {
+  min-width: 0;
+  border: 1px solid var(--ether-glass-border);
+  border-radius: 0.82rem;
+  background: var(--ether-control-bg);
+  padding: 0.38rem;
+}
+
+.date-info-month-current {
+  border-color: color-mix(in srgb, var(--ether-teal) 42%, var(--ether-glass-border));
+  background: color-mix(in srgb, var(--ether-teal) 10%, var(--ether-control-bg));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ether-teal) 14%, transparent);
+}
+
+.date-info-month-marked {
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ether-amber) 18%, transparent);
+}
+
+.date-info-month-label {
+  color: var(--ether-on-surface-variant);
+  font-size: 0.52rem;
+  font-weight: 850;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.date-info-month-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  margin-top: 0.24rem;
+}
+
+.date-info-month-days span {
+  display: grid;
+  aspect-ratio: 1;
+  min-width: 0;
+  place-items: center;
+  border-radius: 0.28rem;
+  background: color-mix(in srgb, var(--ether-on-surface) 8%, transparent);
+  color: color-mix(in srgb, var(--ether-on-surface) 76%, transparent);
+  font-size: clamp(0.42rem, 2cqw, 0.54rem);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.date-info-month-days .date-info-day-today {
+  background: var(--date-info-accent);
+  color: var(--ether-control-active-text);
+  box-shadow: 0 0 0.55rem color-mix(in srgb, var(--date-info-accent) 42%, transparent);
+}
+
+.date-info-month-days .date-info-day-important {
+  background: color-mix(in srgb, var(--ether-amber) 78%, var(--ether-surface-container));
+  color: color-mix(in srgb, var(--ether-amber) 18%, #0f172a);
+  box-shadow: 0 0 0.45rem color-mix(in srgb, var(--ether-amber) 42%, transparent);
+}
+
+.date-info-month-days .date-info-day-today.date-info-day-important {
+  background: var(--date-info-accent);
+  color: var(--ether-control-active-text);
+}
+
+.date-info-events {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.date-info-event-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  border: 1px solid var(--ether-glass-border);
+  border-radius: 0.82rem;
+  background: var(--ether-control-bg);
+  padding: 0.42rem 0.48rem;
+}
+
+.date-info-event-row span,
+.date-info-event-row strong {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.date-info-event-row span {
+  color: var(--ether-on-surface);
+  font-size: 0.72rem;
+  font-weight: 850;
+}
+
+.date-info-event-row strong {
+  margin-top: 0.04rem;
+  color: var(--ether-on-surface-variant);
+  font-size: 0.58rem;
+  font-weight: 750;
+}
+
+.date-info-event-row button,
+.date-info-editor button {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 9999px;
+  color: var(--ether-on-surface-variant);
+  transition: background-color 180ms ease, color 180ms ease, transform 180ms ease;
+}
+
+.date-info-event-row button {
+  width: 1.55rem;
+  height: 1.55rem;
+}
+
+.date-info-event-row button:hover,
+.date-info-editor button:hover {
+  background: var(--ether-control-hover);
+  color: var(--ether-on-surface);
+}
+
+.date-info-empty {
+  margin-top: 0.34rem;
+  font-size: 0.68rem;
+}
+
+.date-info-editor {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 8.6rem) auto auto;
+  gap: 0.35rem;
+}
+
+.date-info-editor input[type='text'],
+.date-info-editor input[type='date'],
+.date-info-editor input:not([type]) {
+  min-width: 0;
+  border: 1px solid var(--ether-glass-border);
+  border-radius: 0.76rem;
+  background: var(--ether-control-bg);
+  padding: 0.42rem 0.5rem;
+  color: var(--ether-on-surface);
+  font-size: 0.72rem;
+  font-weight: 750;
+  outline: none;
+}
+
+.date-info-editor input::placeholder {
+  color: color-mix(in srgb, var(--ether-on-surface-variant) 62%, transparent);
+}
+
+.date-info-editor label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--ether-on-surface-variant);
+  font-size: 0.62rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.date-info-editor button {
+  width: 2rem;
+  height: 2rem;
+  background: var(--date-info-accent-soft);
+  color: var(--ether-on-surface);
+}
+
+.date-info-expanded-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(80% 90% at 50% 10%, color-mix(in srgb, var(--ether-violet) 18%, transparent), transparent 58%),
+    rgba(3, 7, 18, 0.52);
+  padding: 1rem;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.date-info-expanded-calendar {
+  --date-info-accent: var(--dashboard-widget-accent, var(--ether-violet));
+  display: flex;
+  width: min(46rem, 94vw);
+  max-height: min(46rem, 90vh);
+  min-height: min(34rem, 88vh);
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--ether-glass-border);
+  border-radius: 1.45rem;
+  background:
+    radial-gradient(90% 70% at 12% 0%, color-mix(in srgb, var(--date-info-accent) 12%, transparent), transparent 52%),
+    radial-gradient(82% 88% at 100% 18%, color-mix(in srgb, var(--ether-teal) 10%, transparent), transparent 54%),
+    var(--ether-overlay-panel);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--ether-on-surface) 8%, transparent),
+    0 1.8rem 5rem rgba(0, 0, 0, 0.45);
+  color: var(--ether-on-surface);
+}
+
+.date-info-expanded-header,
+.date-info-expanded-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.95rem 1rem;
+}
+
+.date-info-expanded-header {
+  border-bottom: 1px solid var(--ether-glass-border);
+}
+
+.date-info-expanded-header span {
+  display: block;
+  color: var(--date-info-accent);
+  font-size: 0.66rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.date-info-expanded-header strong {
+  display: block;
+  margin-top: 0.08rem;
+  font-size: clamp(1.45rem, 5vw, 2.25rem);
+  font-weight: 900;
+  letter-spacing: 0;
+}
+
+.date-info-expanded-close,
+.date-info-expanded-nav button,
+.date-info-expanded-tabs button,
+.date-info-week-toggle {
+  display: inline-grid;
+  min-height: 2.18rem;
+  place-items: center;
+  border: 1px solid var(--ether-glass-border);
+  border-radius: 9999px;
+  background: var(--ether-control-bg);
+  color: var(--ether-on-surface-variant);
+  font-size: 0.72rem;
+  font-weight: 850;
+  transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease, transform 180ms ease;
+}
+
+.date-info-expanded-close,
+.date-info-expanded-nav button {
+  width: 2.18rem;
+}
+
+.date-info-expanded-close:hover,
+.date-info-expanded-nav button:hover,
+.date-info-expanded-tabs button:hover,
+.date-info-week-toggle:hover {
+  border-color: color-mix(in srgb, var(--date-info-accent) 36%, var(--ether-glass-border));
+  background: var(--ether-control-hover);
+  color: var(--ether-on-surface);
+  transform: translateY(-1px);
+}
+
+.date-info-expanded-toolbar {
+  flex-wrap: wrap;
+  padding-top: 0.78rem;
+}
+
+.date-info-expanded-nav,
+.date-info-expanded-tabs {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.date-info-expanded-tabs {
+  border: 1px solid var(--ether-glass-border);
+  border-radius: 9999px;
+  background: var(--ether-surface-container-low);
+  padding: 0.24rem;
+}
+
+.date-info-expanded-tabs button {
+  min-width: 4.4rem;
+  border-color: transparent;
+  background: transparent;
+  padding: 0 0.9rem;
+}
+
+.date-info-expanded-tabs .date-info-expanded-tab-active,
+.date-info-week-toggle-active {
+  border-color: color-mix(in srgb, var(--date-info-accent) 48%, var(--ether-glass-border));
+  background: color-mix(in srgb, var(--date-info-accent) 18%, var(--ether-control-bg));
+  color: var(--ether-on-surface);
+}
+
+.date-info-week-toggle {
+  padding: 0 0.95rem;
+}
+
+.date-info-expanded-month-grid,
+.date-info-expanded-week-days {
+  display: grid;
+  gap: 0.4rem;
+  padding: 0 1rem 1rem;
+}
+
+.date-info-expanded-month-grid {
+  grid-template-columns: repeat(7, minmax(2.1rem, 1fr));
+  overflow: auto;
+}
+
+.date-info-expanded-month-grid-weeks {
+  grid-template-columns: minmax(2rem, 0.56fr) repeat(7, minmax(2.1rem, 1fr));
+}
+
+.date-info-expanded-month-grid-compact {
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 1px;
+  padding: 0;
+  overflow: visible;
+}
+
+.date-info-expanded-week-label,
+.date-info-expanded-weekday,
+.date-info-expanded-week-number {
+  display: grid;
+  min-height: 1.65rem;
+  place-items: center;
+  color: var(--ether-on-surface-variant);
+  font-size: 0.62rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.date-info-expanded-week-number {
+  border-radius: 0.75rem;
+  background: var(--ether-control-bg);
+  color: var(--ether-on-surface-variant);
+}
+
+.date-info-expanded-day {
+  display: grid;
+  aspect-ratio: 1;
+  min-height: 2.45rem;
+  place-items: center;
+  border: 1px solid var(--ether-glass-border);
+  border-radius: 0.95rem;
+  background: var(--ether-control-bg);
+  color: var(--ether-on-surface);
+  font-size: 0.9rem;
+  font-weight: 850;
+  font-variant-numeric: tabular-nums;
+}
+
+.date-info-expanded-month-grid-compact .date-info-expanded-day {
+  min-height: 0;
+  border: 0;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--ether-on-surface) 14%, transparent);
+  color: transparent;
+  font-size: 0;
+}
+
+.date-info-expanded-day:hover {
+  border-color: color-mix(in srgb, var(--date-info-accent) 38%, var(--ether-glass-border));
+  background: color-mix(in srgb, var(--date-info-accent) 14%, var(--ether-control-bg));
+}
+
+.date-info-expanded-day-outside {
+  color: color-mix(in srgb, var(--ether-on-surface-variant) 56%, transparent);
+}
+
+.date-info-expanded-month-grid-compact .date-info-expanded-day-outside {
+  background: transparent;
+}
+
+.date-info-expanded-day-today {
+  border-color: color-mix(in srgb, var(--ether-teal) 42%, var(--ether-glass-border));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ether-teal) 18%, transparent);
+}
+
+.date-info-expanded-day-important:not(.date-info-expanded-day-selected) {
+  border-color: color-mix(in srgb, var(--ether-amber) 38%, var(--ether-glass-border));
+  background: color-mix(in srgb, var(--ether-amber) 14%, var(--ether-control-bg));
+}
+
+.date-info-expanded-day-selected {
+  border-color: color-mix(in srgb, var(--date-info-accent) 72%, var(--ether-glass-border));
+  background: var(--date-info-accent);
+  color: var(--ether-control-active-text);
+  box-shadow: 0 0 1rem color-mix(in srgb, var(--date-info-accent) 38%, transparent);
+}
+
+.date-info-expanded-week-view {
+  display: grid;
+  gap: 0.85rem;
+  padding: 0 1rem 1rem;
+  overflow: auto;
+}
+
+.date-info-expanded-week-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border: 1px solid var(--ether-glass-border);
+  border-radius: 1.05rem;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--date-info-accent) 14%, transparent), color-mix(in srgb, var(--ether-teal) 10%, transparent)),
+    var(--ether-control-bg);
+  padding: 0.72rem 0.82rem;
+}
+
+.date-info-expanded-week-summary span {
+  color: var(--ether-on-surface-variant);
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.date-info-expanded-week-summary strong {
+  font-size: 1.5rem;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+}
+
+.date-info-expanded-week-days {
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  padding: 0;
+}
+
+.date-info-expanded-week-days button {
+  display: grid;
+  min-height: 7.8rem;
+  border: 1px solid var(--ether-glass-border);
+  border-radius: 1.05rem;
+  background: var(--ether-control-bg);
+  padding: 0.64rem 0.45rem;
+  text-align: center;
+}
+
+.date-info-expanded-week-days span,
+.date-info-expanded-week-days em {
+  color: var(--ether-on-surface-variant);
+  font-size: 0.62rem;
+  font-style: normal;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.date-info-expanded-week-days strong {
+  align-self: center;
+  color: var(--ether-on-surface);
+  font-size: clamp(1.4rem, 5vw, 2.2rem);
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+}
+
+.date-info-expanded-week-day-selected,
+.date-info-expanded-week-day-today {
+  border-color: color-mix(in srgb, var(--date-info-accent) 50%, var(--ether-glass-border)) !important;
+  background: color-mix(in srgb, var(--date-info-accent) 18%, var(--ether-control-bg)) !important;
+}
+
+.date-info-expanded-week-day-important:not(.date-info-expanded-week-day-selected) {
+  border-color: color-mix(in srgb, var(--ether-amber) 36%, var(--ether-glass-border)) !important;
+}
+
+.date-info-expanded-year-view {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.65rem;
+  min-height: 0;
+  overflow: auto;
+  padding: 0 1rem 1rem;
+}
+
+.date-info-expanded-year-month {
+  display: grid;
+  gap: 0.42rem;
+  min-width: 0;
+  border: 1px solid var(--ether-glass-border);
+  border-radius: 1rem;
+  background: var(--ether-control-bg);
+  padding: 0.58rem;
+  text-align: left;
+}
+
+.date-info-expanded-year-month > span {
+  overflow: hidden;
+  color: var(--ether-on-surface);
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.date-info-expanded-year-month-current {
+  border-color: color-mix(in srgb, var(--ether-teal) 40%, var(--ether-glass-border));
+  background: color-mix(in srgb, var(--ether-teal) 10%, var(--ether-control-bg));
+}
+
+@media (max-width: 680px) {
+  .date-info-expanded-calendar {
+    min-height: min(36rem, 90vh);
+  }
+
+  .date-info-expanded-tabs {
+    order: 3;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .date-info-expanded-tabs button {
+    min-width: 0;
+    flex: 1 1 0;
+  }
+
+  .date-info-expanded-week-days {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .date-info-expanded-year-view {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+functions/node_modules/
+
+# Build output
+dist/
+output/
+.firebase/
+
+# Release artifacts
+release/mac/
+release/mac-arm64/
+release/win-unpacked/
+release/*.dmg
+release/*.exe
+release/*.AppImage
+release/*.deb
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+Thumbs.db

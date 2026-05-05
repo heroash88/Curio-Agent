@@ -1,0 +1,57 @@
+directories:
+  output: release
+  buildResources: build-resources
+appId: com.curio.robot
+productName: Curio Robot
+files:
+  - filter:
+      - dist/**/*
+      - electron/**/*
+      - public/curio_icon.png
+      - scripts/nova-proxy.mjs
+      - node_modules/ws/**/*
+asarUnpack:
+  - scripts/nova-proxy.mjs
+  - node_modules/ws/**/*
+extraMetadata:
+  main: electron/main.cjs
+win:
+  target:
+    - target: nsis
+      arch:
+        - x64
+    - target: portable
+      arch:
+        - x64
+  icon: public/curio_icon.png
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  shortcutName: Curio Robot
+mac:
+  target:
+    - target: dmg
+      arch:
+        - x64
+        - arm64
+  icon: public/curio_icon.png
+  category: public.app-category.utilities
+  darkModeSupport: true
+  extendInfo:
+    NSCameraUsageDescription: Curio uses the camera for Face ID, face tracking, and optional visual questions when you enable camera features.
+    NSMicrophoneUsageDescription: Curio uses the microphone for voice conversations, wake word detection, and Voice ID when you enable voice features.
+dmg:
+  title: Curio Robot
+linux:
+  target:
+    - target: AppImage
+      arch:
+        - x64
+    - target: deb
+      arch:
+        - x64
+  icon: public/curio_icon.png
+  category: Utility
+  maintainer: Curio Team
+  description: Voice-powered AI assistant with 30+ response cards
+electronVersion: 41.2.1
