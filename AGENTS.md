@@ -416,7 +416,9 @@ When adding or modifying interactive behavior in dashboard widgets:
 - Cross-widget communication uses the event bus in `dashboardIntents.ts`:
   `dispatchDropIntent` for drag-and-drop, `dispatchHover`/`dispatchSelect`
   for hover highlights. Register supported drop pairs in
-  `DROP_INTENT_REGISTRY`.
+  `DROP_INTENT_REGISTRY`. Current pairs: tasks→pomodoro,
+  reminders→pomodoro, stocks→portfolio, news→rich_note/obsidian/bookmarks,
+  bookmarks→notes/rich_note/obsidian, map→commute.
 - Toast notifications go through `dashboardToastBus` (not raw DOM events).
   The `DashboardToastHost` renders them; widgets never render their own
   toast UI.
@@ -427,7 +429,20 @@ When adding or modifying interactive behavior in dashboard widgets:
 - Sparkline data goes through `dashboardSparklineStore.ts`
   (`appendWidgetSparklineSample`, `getWidgetSparklineHistory`).
 - Layout presets are managed by `dashboardLayoutPresets.ts`. Applying a
-  preset replaces the active page and emits an undo toast.
+  preset replaces the active page and emits an undo toast. Exporting
+  downloads a JSON file and copies to clipboard.
+- `useDragReorder` supports both single-column lists (vertical drag) and
+  multi-column grids (2D drag). It auto-detects grid columns at drag start.
+  Visual feedback uses direct DOM manipulation for zero-jitter performance.
+- `useSwipeGesture` provides horizontal swipe-to-dismiss on list rows.
+  Gate behind `swipeGesturesEnabled`. Emit an undo toast on commit.
+- Inline search with autocomplete (Markets, Portfolio) uses debounced
+  `searchStockSymbols()` with AbortController cleanup. The search button
+  toggles the panel; no separate settings modal needed.
+- Face animation loops (AstroFace, KiroFace) use `performance.now()`-based
+  timing for frame-rate independence. Never increment phase by a fixed
+  constant per frame. Eye tracking lerp uses exponential decay normalized
+  to frame delta: `effectiveLerp = 1 - (1 - baseLerp)^(dt / baseDt)`.
 
 ### Settings
 
